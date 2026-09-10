@@ -1,0 +1,107 @@
+/*
+ * Site styles. Starlight's cascade-layer order comes first, so Tailwind utilities can override
+ * Starlight but Starlight's base styles are never replaced by Tailwind's reset (which is not loaded).
+ */
+@layer base, starlight, theme, components, utilities;
+@import '@astrojs/starlight-tailwind';
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+/* Starlight marks the theme on <html data-theme="light|dark">; shadcn's dark: variant follows it. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* NeCast blue (#1F4E9E, the method colour of the paper's figures) as Starlight's accent. */
+:root {
+  --sl-color-accent-low: #12284a;
+  --sl-color-accent: #6f9bdb;
+  --sl-color-accent-high: #cddcf3;
+}
+:root[data-theme='light'] {
+  --sl-color-accent-low: #dbe5f4;
+  --sl-color-accent: #1f4e9e;
+  --sl-color-accent-high: #12305f;
+}
+
+/* System fonts only: nothing is downloaded, which matters most for readers in mainland China. */
+:root[lang='zh-CN'] {
+  --sl-font: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+    'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans SC', sans-serif;
+}
+
+/* shadcn/ui tokens, taken from Starlight's theme variables so both themes stay consistent. */
+:root {
+  --background: var(--sl-color-bg);
+  --foreground: var(--sl-color-white);
+  --card: var(--sl-color-bg);
+  --card-foreground: var(--sl-color-white);
+  --popover: var(--sl-color-bg-nav);
+  --popover-foreground: var(--sl-color-white);
+  --primary: var(--sl-color-accent);
+  --primary-foreground: var(--sl-color-text-invert);
+  --secondary: var(--sl-color-gray-6);
+  --secondary-foreground: var(--sl-color-white);
+  --muted: var(--sl-color-gray-6);
+  --muted-foreground: var(--sl-color-gray-3);
+  --accent: var(--sl-color-accent-low);
+  --accent-foreground: var(--sl-color-accent-high);
+  --destructive: var(--sl-color-red);
+  --border: var(--sl-color-hairline-light);
+  --input: var(--sl-color-gray-5);
+  --ring: var(--sl-color-accent);
+  --radius: 0.5rem;
+}
+
+@theme inline {
+  --font-sans: var(--sl-font, var(--sl-font-system));
+  --font-mono: var(--sl-font-mono, var(--sl-font-system-mono));
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+/* shadcn's base rules, applied only inside interactive components (wrapped in .necast-ui). */
+@layer components {
+  .necast-ui,
+  .necast-ui *,
+  .necast-ui *::before,
+  .necast-ui *::after {
+    border-color: var(--border);
+    outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
+  }
+  .necast-ui {
+    font-family: var(--sl-font, var(--sl-font-system));
+    color: var(--foreground);
+  }
+  /* Tailwind's reset is not loaded, so native buttons (table rows, headers) would keep the
+     browser's button background, which shows in dark mode. Utilities still override this. */
+  .necast-ui button {
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
+    border-width: 0;
+    padding: 0;
+    margin: 0;
+    text-align: inherit;
+  }
+}

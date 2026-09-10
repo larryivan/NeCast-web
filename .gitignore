@@ -36,3 +36,6 @@ coverage/
 # Keep public/data itself trackable: it is the static portal index.
 public/data/**/*.tmp
 public/data/**/.cache/
+
+# Astro
+.astro/
