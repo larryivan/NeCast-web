@@ -1,0 +1,43 @@
+---
+title: Benchmark
+description: The simulated benchmark on which NeCast is compared with phlash, SMC++, FitCoal and MSMC2.
+---
+
+[`Larrivhan/NeCast-benchmark`](https://huggingface.co/datasets/Larrivhan/NeCast-benchmark) holds the
+true histories, the simulated windows, the exact inputs each method received, every estimate, the
+scores, the timing runs, eight-window joint fits, and twelve scenarios with population structure.
+
+![The 33 histories](../../../assets/figures/benchmark_histories.png)
+
+**The 33 histories**, as the 64-interval curves every method is scored against, ordered by family:
+human and other realistic models, bottlenecks, steps and slow changes, constant sizes,
+oscillations. The 12 marked a2 are also in setting `a2`; all 33 are in `a1` and `b`.
+
+## Three settings
+
+All windows are 30 Mb long, hold 64 diploid individuals, and were made with the simulator of the
+training data, with seeds that no training window used. Every method read the same 32
+individuals of each window.
+
+| setting | histories | rates and maps | errors | methods |
+|---|---|---|---|---|
+| `a1` | 33 | uniform, μ = 1.25 × 10⁻⁸ and r = 10⁻⁸ per bp per generation | none | NeCast, phlash, SMC++, FitCoal, MSMC2 |
+| `a2` | 12 | as `a1` | genotype errors, missing calls, false sites and phase switches at the levels of the training data | the same |
+| `b` | 33 | slices of the deCODE 2019 recombination map and the Roulette mutation map | as `a2` | NeCast |
+
+Each history has 12 windows, of which 8 are scored. In setting `b`, NeCast read each window with
+five versions of the maps (`map_variants/`).
+
+## Contents
+
+| path | contents |
+|---|---|
+| `histories/` | the 33 histories: definition and true curve of each |
+| `windows/{a1,a2,b}/` | the simulated windows of each setting |
+| `necast_inputs/`, `method_inputs/` | what NeCast read, and the files given to phlash, SMC++, FitCoal and MSMC2 |
+| `estimates/<method>/` | every fit, with its settings and receipt |
+| `scores/`, `results/` | per-window scores, every method's curve on the 64 intervals, and the summary tables |
+| `timing/`, `joint_fits/`, `structure/` | timing runs, eight-window joint fits, and the 12 structure scenarios |
+
+The [dataset card](https://huggingface.co/datasets/Larrivhan/NeCast-benchmark) gives the method
+settings and the file layout.

@@ -1,0 +1,64 @@
+---
+title: Datasets and downloads
+description: The four NeCast repositories on Hugging Face, and how to download all or part of them.
+---
+
+import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+
+Everything behind the NeCast paper is on Hugging Face under CC BY 4.0. Each repository has a card
+that describes every file, and a `SHA256SUMS` file with a checksum for every file.
+
+| repository | contents | size |
+|---|---|---|
+| [`Larrivhan/NeCast-simulations`](https://huggingface.co/datasets/Larrivhan/NeCast-simulations) | 109,248 simulated windows with their true histories, the network's input files and the simulator ([details](simulations/), [explorer](explorer/)) | 647 GB |
+| [`Larrivhan/NeCast-benchmark`](https://huggingface.co/datasets/Larrivhan/NeCast-benchmark) | 33 histories in three settings: windows, the inputs given to each method, every estimate and the scores ([details](benchmark/)) | 24 GB |
+| [`Larrivhan/NeCast-1000G`](https://huggingface.co/datasets/Larrivhan/NeCast-1000G) | 25 populations of the 1000 Genomes Project on 51 windows, and the low-coverage comparison ([details](1000g/)) | 196 GB |
+| [`Larrivhan/NeCast`](https://huggingface.co/Larrivhan/NeCast) | the trained network, its training record and the networks of the comparisons ([details](../model/)) | 0.8 GB |
+
+## Downloading
+
+The [corpus explorer](explorer/) writes a download script for any selection of windows. To fetch
+files directly:
+
+<Tabs syncKey="download">
+  <TabItem label="Python">
+    ```python
+    from huggingface_hub import hf_hub_download, snapshot_download
+
+    # one file
+    path = hf_hub_download("Larrivhan/NeCast-simulations", "index/windows.parquet", repo_type="dataset")
+
+    # part of a repository
+    snapshot_download("Larrivhan/NeCast-benchmark", repo_type="dataset",
+                      allow_patterns=["histories/*", "results/*"], local_dir="necast-benchmark")
+    ```
+  </TabItem>
+  <TabItem label="Command line">
+    ```bash
+    pip install -U huggingface_hub
+    hf download Larrivhan/NeCast-simulations index/windows.parquet --repo-type dataset --local-dir necast-simulations
+    hf download Larrivhan/NeCast-benchmark --repo-type dataset --include "histories/*" --local-dir necast-benchmark
+    ```
+  </TabItem>
+</Tabs>
+
+<Aside type="tip" title="In mainland China">
+  huggingface.co is often unreachable. Set `HF_ENDPOINT=https://hf-mirror.com` before running the
+  commands above, or replace `huggingface.co` with `hf-mirror.com` in a download link.
+</Aside>
+
+## Checking a download
+
+Download `SHA256SUMS` with the files, then check the files you have:
+
+```bash
+cd necast-simulations
+sha256sum --check --ignore-missing SHA256SUMS
+```
+
+## Licences
+
+The data and weights are released under CC BY 4.0, and the simulator code under MIT. Third-party
+files the simulator used (the deCODE and Roulette maps, the published human histories and the
+stdpopsim trajectories) are not copied; each repository lists them with their sources and
+checksums, with the scripts that build them.

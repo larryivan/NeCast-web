@@ -1,0 +1,44 @@
+---
+title: How NeCast works
+description: What NeCast reads, how the network combines it, what it returns and how it was trained.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+NeCast estimates the size history of a population from one window of genome sequence. It reads
+the unphased genotypes of 32 diploid individuals in 30 Mb of accessible sequence, together with
+the recombination and mutation maps estimated for that window, and returns log₁₀ N<sub>e</sub> on
+64 time intervals evenly spaced in log time between 50 and 500,000 generations ago. A window takes
+seconds on a CPU.
+
+## Five streams over the same sites
+
+- **Site encoder.** It reads the genotypes at every segregating site with each site's position on
+  the recombination and mutation maps, so that distances count expected crossovers and mutations.
+- **Site-frequency spectrum.** The folded spectrum of the 32 individuals.
+- **Linkage disequilibrium.** Between sites 1 to 64 segregating sites apart, grouped by genetic
+  distance.
+- **Identity-by-state tracts.** The length spectra of tracts shared by the 496 pairs of
+  individuals.
+- **PSMC+ posterior.** The posterior of PSMC+ (Cousins et al. 2024), decoded for each individual
+  with both maps and pooled over the 32.
+
+The network outputs a correction for each of the 64 intervals and adds it to a baseline curve:
+the window's Watterson estimate of log₁₀ N<sub>e</sub> plus a fixed offset per interval.
+
+## Training
+
+NeCast was trained on 89,996 simulated windows of the [simulated corpus](../data/simulations/).
+Another 500 training windows chose the epoch, and 500 development windows are the test set. The
+windows come from twelve families of size history. Most carry sequencing-like errors (genotype
+errors, missing calls, false variant sites and phase switches), and most carry maps that vary
+along the sequence, given to the network as estimated maps with estimation error. The training
+settings and the record of every epoch are on the [trained network](../model/) page.
+
+## What it assumes
+
+<Aside type="note">
+  - A window is 30 Mb of accessible sequence, and NeCast reads 32 diploid individuals from it.
+  - Every simulated population mates at random. On real data, read the curve as an inverse
+    coalescence rate (IICR), which equals N<sub>e</sub> only when that holds.
+</Aside>

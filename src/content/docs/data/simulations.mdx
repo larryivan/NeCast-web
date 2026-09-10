@@ -1,0 +1,89 @@
+---
+title: Simulated corpus
+description: The 109,248 simulated windows NeCast was trained and tested on, with their true histories.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+[`Larrivhan/NeCast-simulations`](https://huggingface.co/datasets/Larrivhan/NeCast-simulations)
+holds 109,248 simulated windows. Each is 30 Mb of sequence sampled from 64 diploid individuals,
+with sequencing-like errors already applied, and each comes with its true size history. The
+[corpus explorer](../explorer/) searches and downloads them.
+
+![What the corpus covers](../../../assets/figures/simulations_overview.png)
+
+**a**, Eight training windows drawn at random from each of the twelve families of size history,
+with the number of windows in each family. Each line is a window's 64 interval labels, drawn
+through the interval centres. **b**, Windows by the type of map stored with them. Every window
+carries sequencing-like errors except those with constant maps at the baseline rates. **c**,
+Variant sites per window, false sites included.
+
+## How the windows were simulated
+
+- **Sequence and sample.** 30 Mb, 64 diploid individuals. msprime 1.4.2 with the coalescent with
+  recombination, a binary mutation model, the window's true recombination and mutation maps, and
+  no gene conversion.
+- **Size histories.** Twelve families, recorded in `generator_recipe`. Sizes stay between 100 and
+  1,000,000, and the parameters of every history are in the metadata.
+- **Maps** (`map_type`). Constant at the baseline rates (`constant_clean`), constant at random
+  rates (`constant_random_global`), synthetic maps with hotspots (`synthetic_heterogeneous`), or
+  30-Mb slices of the deCODE 2019 recombination map and the Roulette mutation map from the same
+  interval (`empirical_slice`). The maps stored with a window are the maps a method is given:
+  constant maps exactly, the others as the true map seen through noise.
+- **Errors** (`noise_profile`). Genotype errors, missing calls, false variant sites and phase
+  switches, at rates drawn per window. The windows with constant maps at the baseline rates have
+  none.
+- **Labels.** `target_log10_ne` gives, for each of 64 intervals evenly spaced in log time between
+  50 and 500,000 generations ago, the average of log₁₀ N<sub>e</sub> of the simulated history over
+  the interval.
+
+| family | `generator_recipe` | windows |
+|---|---|---|
+| Constant | `constant` | 4,352 |
+| Exponential | `exponential` | 4,293 |
+| One size change | `size_event` | 10,837 |
+| Several changes | `multi_event` | 8,941 |
+| Bottleneck | `bottleneck` | 10,787 |
+| Event on a trend | `event_on_background` | 9,393 |
+| Random walk | `spectral_walk` | 21,983 |
+| Sawtooth | `sawtooth` | 3,397 |
+| Zigzag-like | `literature_sawtooth` | 3,297 |
+| Founder chain | `ooa_chain` | 8,777 |
+| Published human histories (191 curves from SMC++, phlash, MSMC2 and MSMC-IM) | `empirical_human_ne_template` | 20,560 |
+| The 18 single-population stdpopsim models | `stdpopsim_single_pop` | 2,631 |
+
+## Splits
+
+Windows were assigned by a hash of their identifier: 100,000 train, 5,000 development and 4,248
+reserved; four train windows have no PSMC+ output and belong to no split. The final network was
+fitted on 89,996 train windows, another 500 train windows chose the epoch, and 500 development
+windows are the test set. `splits/stages.json` lists them.
+
+<Aside>
+  The 4,248 reserved windows were never used to train, select or score a network. Now that they
+  are public, they no longer serve as an untouched test set.
+</Aside>
+
+## Reading a window
+
+```python
+from huggingface_hub import hf_hub_download
+import sys
+
+repo = "Larrivhan/NeCast-simulations"
+path = hf_hub_download(repo, "windows/000/fragment_00000000.npz", repo_type="dataset")
+hf_hub_download(repo, "windows/000/fragment_00000000.jsonl.gz", repo_type="dataset")
+reader = hf_hub_download(repo, "tools/necast_windows.py", repo_type="dataset")
+sys.path.insert(0, reader.rsplit("/", 1)[0])
+from necast_windows import Fragment, diploid_genotypes
+
+w = Fragment(path).window(0)
+w["genotypes"].shape       # (n_sites, 128): 0/1, haplotypes 2i and 2i+1 are individual i
+g = diploid_genotypes(w)   # (n_sites, 64): 0, 1, 2, or -1 where a call is missing
+w["target_log10_ne"]       # the 64 labels
+w["metadata"]["generator_recipe"]
+```
+
+Each `.npz` file holds four windows; window `sim_XXXXXXXX` is member `XXXXXXXX mod 4` of
+`fragment_{XXXXXXXX div 4}`. The [dataset card](https://huggingface.co/datasets/Larrivhan/NeCast-simulations)
+describes every array, the feature files the network reads, and the generator.

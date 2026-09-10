@@ -1,0 +1,41 @@
+---
+title: Trained network
+description: The weights of NeCast, its training record and the networks it is compared with in the paper.
+---
+
+The weights are on Hugging Face as [`Larrivhan/NeCast`](https://huggingface.co/Larrivhan/NeCast).
+
+![Training and test error](../../assets/figures/model_training.png)
+
+**a**, Training and validation error after each of the 12 epochs; the validation windows are 500
+further training windows. **b**, Test error in each of the 64 intervals (5-interval running mean),
+with the error over all intervals as a dotted line. **c**, The test windows at the 10th, 50th and
+90th percentiles of per-window error: truth (black step) and NeCast (blue).
+
+## Files
+
+| path | contents |
+|---|---|
+| `final/checkpoint.pt` | weights of the network used in the paper (4.2 MB) |
+| `final/training_state.pt` | the state saved at the end of training |
+| `final/PLAN.json` | the training configuration, input checksums and the lists of training, validation and test windows |
+| `final/DEVELOPMENT.json` | training and validation error at every epoch |
+| `final/test_predictions.npz` | predictions and truth for the 500 test windows |
+| `final/snapshots/` | states saved after epochs 6 and 9 |
+| `training_contrasts/` | 7 networks trained on 8,000 or 88,000 windows |
+| `ablations/` | 5 networks trained on the same 12,500 windows with different inputs |
+
+`final/checkpoint.pt` is a plain PyTorch file. `torch.load(path, map_location="cpu",
+weights_only=True)` returns a dictionary whose `state_dict` holds the weights. The code that builds
+the inputs and runs the network is being prepared for release.
+
+## Training
+
+- **Data.** 89,996 training windows; 500 further training windows to choose the epoch; 500
+  development windows as the test set.
+- **Settings.** 12 epochs on four RTX 4090 GPUs (50.3 h), width 128, seed 20260728. Loss: mean
+  squared error of log₁₀ N<sub>e</sub> over the 64 intervals. AdamW with learning rate
+  3 × 10⁻⁴, cosine decay to 5% of it, weight decay 10⁻⁴, gradient-norm clipping at 1, one update
+  per 32 windows. The last epoch had the lowest validation error.
+- **Test error.** 0.287: the root mean squared error of log₁₀ N<sub>e</sub> over all 64 intervals
+  of the 500 test windows taken together.

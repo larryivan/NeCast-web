@@ -1,0 +1,45 @@
+---
+title: 1000 Genomes analyses
+description: NeCast on 25 populations of the 1000 Genomes Project, and the comparison of the low-coverage and 30× call sets.
+---
+
+[`Larrivhan/NeCast-1000G`](https://huggingface.co/datasets/Larrivhan/NeCast-1000G) holds everything
+between the public call sets and the curves: the windows, the groups of individuals, the genotype
+slices and extractions, every NeCast input and estimate, the phlash fits of the call-set
+comparison, and the result tables.
+
+![The 51 windows and five of the populations](../../../assets/figures/1000g_windows.png)
+
+**a**, The 51 windows on GRCh38, alternately dark and light blue, with the number on each
+chromosome; grey blocks are centromeres. Chromosomes 19–22 hold no window. **b**, NeCast's
+estimates with both maps for YRI, CEU, GIH, CHB and PEL, read as an inverse coalescence rate
+(IICR). Each thin line is one window, averaged over the population's groups of 32, and the thick
+line is their mean.
+
+## Data and windows
+
+- **Call set.** The phased high-coverage (30×) call set of the 1000 Genomes Project, GRCh38.
+- **Populations.** 25 of the 26 populations, each with 64 unrelated individuals; ASW has 61 and was
+  left out. NeCast reads disjoint groups of 32: two groups in 18 populations and one in seven.
+- **Windows.** 30 Mb of accessible sequence under the strict mask, within chromosome arms, with
+  gaps of at most 1 Mb: 51 windows on chromosomes 1–18.
+- **Sites.** Biallelic SNVs; positions with more than one record dropped; the reference allele
+  taken as ancestral.
+- **Maps.** The deCODE 2019 recombination map and the Roulette mutation map, cut to each window.
+
+## Four map inputs
+
+| folder | recombination | mutation |
+|---|---|---|
+| `no_map` | flat at the genome-wide mean | flat |
+| `mutation_map` | flat at the genome-wide mean | Roulette, rescaled to the window's mean rate |
+| `recombination_map` | deCODE 2019 | flat |
+| `both_maps` | deCODE 2019 | Roulette, rescaled as above |
+
+## Low coverage and 30×
+
+For YRI, CEU, CHB, GIH and PEL, the first group of 32 individuals was also extracted from the
+phase 3 call set (low coverage, mean depth 7.4×) on the same 51 windows, and NeCast and phlash were
+run on both call sets (`low_coverage/`).
+
+The [dataset card](https://huggingface.co/datasets/Larrivhan/NeCast-1000G) describes every folder.
