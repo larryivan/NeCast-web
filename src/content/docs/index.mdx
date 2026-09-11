@@ -1,51 +1,66 @@
 ---
 title: Population size histories from genotypes and genetic maps
-description: NeCast estimates the size history of a population from the unphased genotypes of 32 individuals and the recombination and mutation maps of their window.
+description: NeCast estimates the size history of a population from 32 unphased genomes and the recombination and mutation maps of their window.
 template: splash
 hero:
   title: NeCast
-  tagline: The size history of a population from the unphased genotypes of 32 individuals and the recombination and mutation maps of their window, in seconds on a CPU.
+  tagline: The size history of a population from 32 unphased genomes and the recombination and mutation maps of their window, in seconds on a CPU.
   actions:
-    - text: Explore the simulated corpus
+    - text: Explore the corpus
       link: data/explorer/
       icon: right-arrow
-    - text: Datasets and downloads
+    - text: Download the data
       link: data/
       variant: minimal
-    - text: How NeCast works
+    - text: How it works
       link: method/
       variant: minimal
 ---
 
-import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+import Facts from '../../components/home/Facts.astro';
+import Flow from '../../components/home/Flow.astro';
+import Status from '../../components/home/Status.astro';
+import Figure from '../../components/Figure.astro';
+import windowFigure from '../../assets/figures/simulations_window.png';
 
-<CardGrid>
-  <Card title="Input" icon="document">
-    Unphased genotypes of 32 diploid individuals in one window of 30 Mb of accessible sequence, with
-    the recombination and mutation maps estimated for that window.
-  </Card>
-  <Card title="Output" icon="rocket">
-    log₁₀ N<sub>e</sub> on 64 time intervals, evenly spaced in log time from 50 to 500,000
-    generations ago.
-  </Card>
-  <Card title="Training data" icon="puzzle">
-    109,248 simulated windows from twelve families of size history, with sequencing-like errors and
-    maps that vary along the sequence.
-  </Card>
-  <Card title="Open" icon="open-book">
-    The simulations, the benchmark, the 1000 Genomes analyses and the trained network are on Hugging
-    Face under CC BY 4.0. The code is being prepared for release.
-  </Card>
-</CardGrid>
+<Facts
+  items={[
+    { value: '30 Mb', label: 'of accessible sequence per window' },
+    { value: '32', label: 'unphased diploid genomes per analysis' },
+    { value: '64', label: 'time intervals, 50 to 500,000 generations ago' },
+    { value: '109,248', label: 'simulated windows with known histories' },
+  ]}
+/>
 
-## One training window
+## How it works
 
-![One simulated window: genotypes, maps and true history](../../assets/figures/simulations_window.png)
+<Flow
+  steps={[
+    {
+      title: 'Read one window',
+      text: 'The unphased genotypes of 32 diploid individuals in 30 Mb of accessible sequence, with the recombination and mutation maps estimated for that window.',
+    },
+    {
+      title: 'Five streams',
+      text: 'A site encoder, the site-frequency spectrum, linkage disequilibrium, identity-by-state tracts and the PSMC+ posterior all read the same sites.',
+    },
+    {
+      title: 'The size history',
+      text: 'A correction on each of 64 intervals, added to the window’s Watterson level, gives log₁₀ Nₑ from 50 to 500,000 generations ago.',
+    },
+  ]}
+  more={{ text: 'The method in detail', link: 'method/' }}
+/>
 
-**a**, Genotypes of the 64 individuals of window `sim_00000016` at the 133 variant sites between
-15.00 and 15.10 Mb: 0 pale, 1 light blue, 2 dark blue, missing calls orange. **b**, The
-recombination and mutation maps stored with the window, averaged in 300-kb bins. **c**, The
-simulated history (grey) and its 64 interval labels (black), which are the network's targets.
+## A training window
+
+<Figure src={windowFigure} alt="One simulated window: genotypes, maps and true history">
+  **a**, Genotypes of the 64 individuals of window `sim_00000016` at the 133 variant sites between
+  15.00 and 15.10 Mb: 0 pale, 1 light blue, 2 dark blue, missing calls orange. **b**, The
+  recombination and mutation maps stored with the window, averaged in 300-kb bins. **c**, The
+  simulated history (grey) and its 64 interval labels (black), which are the network's targets.
+</Figure>
 
 ## Data and network
 
@@ -71,3 +86,16 @@ simulated history (grey) and its 64 interval labels (black), which are the netwo
     href="model/"
   />
 </CardGrid>
+
+## Status
+
+<Status
+  nowTitle="Available now"
+  now={[
+    'The simulated corpus, the benchmark and the 1000 Genomes analyses, on Hugging Face under CC BY 4.0',
+    'The trained network and its full training record',
+    'The <a href="data/explorer/">corpus explorer</a> on this site',
+  ]}
+  nextTitle="In preparation"
+  next={['The code, on GitHub with an archived release on Zenodo', 'The paper']}
+/>

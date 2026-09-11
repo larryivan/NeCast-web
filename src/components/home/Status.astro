@@ -1,0 +1,62 @@
+---
+// What is public now and what is still being prepared.
+interface Props {
+  nowTitle: string;
+  now: string[];
+  nextTitle: string;
+  next: string[];
+}
+const { nowTitle, now, nextTitle, next } = Astro.props;
+---
+
+<div class="status not-content">
+  <section>
+    <h3><span class="dot ready" aria-hidden="true" />{nowTitle}</h3>
+    <ul>{now.map((item) => <li set:html={item} />)}</ul>
+  </section>
+  <section>
+    <h3><span class="dot soon" aria-hidden="true" />{nextTitle}</h3>
+    <ul>{next.map((item) => <li set:html={item} />)}</ul>
+  </section>
+</div>
+
+<style>
+  .status {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1rem;
+  }
+  section {
+    padding: 1.25rem 1.4rem;
+    border: 1px solid var(--sl-color-hairline-light);
+    border-radius: 0.75rem;
+  }
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin: 0 0 0.75rem;
+    font-size: var(--sl-text-base);
+    color: var(--sl-color-white);
+  }
+  .dot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+  }
+  .ready {
+    background: #2e8c6e;
+  }
+  .soon {
+    background: #c9a878;
+  }
+  ul {
+    margin: 0;
+    padding-inline-start: 1.1rem;
+    display: grid;
+    gap: 0.4rem;
+    font-size: var(--sl-text-sm);
+    line-height: 1.55;
+    color: var(--sl-color-gray-2);
+  }
+</style>

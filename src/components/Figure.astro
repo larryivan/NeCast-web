@@ -1,0 +1,39 @@
+---
+// A figure with its caption, optimised by Astro (responsive widths, modern formats).
+import { Image } from 'astro:assets';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+}
+const { src, alt } = Astro.props;
+---
+
+<figure class="necast-figure">
+  <Image src={src} alt={alt} widths={[640, 960, 1280, 1535]} sizes="(min-width: 72rem) 52rem, 100vw" />
+  <figcaption><slot /></figcaption>
+</figure>
+
+<style>
+  .necast-figure {
+    margin-block: 1.25rem 2rem;
+  }
+  .necast-figure :global(img) {
+    width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    background: #fff;
+  }
+  figcaption {
+    margin-top: 0.75rem;
+    font-size: var(--sl-text-sm);
+    line-height: 1.6;
+    color: var(--sl-color-gray-3);
+  }
+  figcaption :global(p) {
+    margin: 0;
+  }
+  figcaption :global(strong) {
+    color: var(--sl-color-gray-2);
+  }
+</style>

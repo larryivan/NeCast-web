@@ -1,0 +1,93 @@
+---
+// The three steps from a window to its size history. The order is real, so the steps are numbered.
+interface Props {
+  steps: { title: string; text: string }[];
+  more?: { text: string; link: string };
+}
+const { steps, more } = Astro.props;
+---
+
+<div class="flow not-content">
+  <ol>
+    {
+      steps.map((step, i) => (
+        <li>
+          <span class="n">{i + 1}</span>
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+        </li>
+      ))
+    }
+  </ol>
+  {
+    more && (
+      <a class="more" href={more.link}>
+        {more.text} <span aria-hidden="true">→</span>
+      </a>
+    )
+  }
+</div>
+
+<style>
+  .flow ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1rem;
+    counter-reset: step;
+  }
+  .flow li {
+    position: relative;
+    padding: 1.25rem 1.25rem 1.35rem;
+    border-radius: 0.75rem;
+    background: color-mix(in srgb, var(--sl-color-accent) 7%, var(--sl-color-bg));
+  }
+  .n {
+    display: inline-grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 999px;
+    font-size: var(--sl-text-sm);
+    font-weight: 700;
+    color: var(--sl-color-text-invert);
+    background: var(--sl-color-accent);
+  }
+  h3 {
+    margin: 0.85rem 0 0.4rem;
+    font-size: var(--sl-text-lg);
+    color: var(--sl-color-white);
+  }
+  p {
+    margin: 0;
+    font-size: var(--sl-text-sm);
+    line-height: 1.6;
+    color: var(--sl-color-gray-2);
+  }
+  @media (min-width: 50rem) {
+    .flow li:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 2.1rem;
+      right: -0.85rem;
+      width: 0.7rem;
+      height: 0.7rem;
+      border-top: 2px solid var(--sl-color-accent);
+      border-right: 2px solid var(--sl-color-accent);
+      transform: rotate(45deg);
+      opacity: 0.6;
+    }
+  }
+  .more {
+    display: inline-block;
+    margin-top: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--sl-color-text-accent);
+  }
+  .more:hover {
+    text-decoration: underline;
+  }
+</style>
