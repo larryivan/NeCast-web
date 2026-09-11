@@ -4,12 +4,14 @@ description: NeCast 训练和测试所用的 109,248 个模拟窗口及其真实
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Figure from '../../../../components/Figure.astro';
+import simulationsOverviewZhFigure from '../../../../assets/figures/simulations_overview_zh.png';
 
 [`Larrivhan/NeCast-simulations`](https://huggingface.co/datasets/Larrivhan/NeCast-simulations) 包含 109,248 个模拟窗口。每个窗口是 64 个二倍体个体的 30 Mb 序列，已经加入了测序误差，并附有真实的群体大小历史。[语料浏览器](../explorer/)可以检索和下载这些窗口。
 
-![语料的覆盖范围](../../../../assets/figures/simulations_overview.png)
-
-**a**，从 12 类群体大小历史中各随机抽取 8 个训练窗口，并标出每类的窗口数；每条线是一个窗口的 64 个区间标签，画在区间中点上。**b**，按所附图谱类型统计的窗口数；除基线均匀速率的恒定图谱窗口外，所有窗口都带有测序误差。**c**，每个窗口的变异位点数（含假变异）。
+<Figure src={simulationsOverviewZhFigure} alt="语料的覆盖范围">
+  **a**，从 12 类群体大小历史中各随机抽取 8 个训练窗口，并标出每类的窗口数；每条线是一个窗口的 64 个区间标签，画在区间中点上。**b**，按所附图谱类型统计的窗口数；除基线均匀速率的恒定图谱窗口外，所有窗口都带有测序误差。**c**，每个窗口的变异位点数（含假变异）。
+</Figure>
 
 ## 怎样模拟
 

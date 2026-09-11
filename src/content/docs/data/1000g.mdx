@@ -3,18 +3,21 @@ title: 1000 Genomes analyses
 description: NeCast on 25 populations of the 1000 Genomes Project, and the comparison of the low-coverage and 30× call sets.
 ---
 
+import Figure from '../../../components/Figure.astro';
+import gWindowsFigure from '../../../assets/figures/1000g_windows.png';
+
 [`Larrivhan/NeCast-1000G`](https://huggingface.co/datasets/Larrivhan/NeCast-1000G) holds everything
 between the public call sets and the curves: the windows, the groups of individuals, the genotype
 slices and extractions, every NeCast input and estimate, the phlash fits of the call-set
 comparison, and the result tables.
 
-![The 51 windows and five of the populations](../../../assets/figures/1000g_windows.png)
-
-**a**, The 51 windows on GRCh38, alternately dark and light blue, with the number on each
-chromosome; grey blocks are centromeres. Chromosomes 19–22 hold no window. **b**, NeCast's
-estimates with both maps for YRI, CEU, GIH, CHB and PEL, read as an inverse coalescence rate
-(IICR). Each thin line is one window, averaged over the population's groups of 32, and the thick
-line is their mean.
+<Figure src={gWindowsFigure} alt="The 51 windows and five of the populations">
+  **a**, The 51 windows on GRCh38, alternately dark and light blue, with the number on each
+  chromosome; grey blocks are centromeres. Chromosomes 19–22 hold no window. **b**, NeCast's
+  estimates with both maps for YRI, CEU, GIH, CHB and PEL, read as an inverse coalescence rate
+  (IICR). Each thin line is one window, averaged over the population's groups of 32, and the thick
+  line is their mean.
+</Figure>
 
 ## Data and windows
 

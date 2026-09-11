@@ -4,19 +4,21 @@ description: The 109,248 simulated windows NeCast was trained and tested on, wit
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Figure from '../../../components/Figure.astro';
+import simulationsOverviewFigure from '../../../assets/figures/simulations_overview.png';
 
 [`Larrivhan/NeCast-simulations`](https://huggingface.co/datasets/Larrivhan/NeCast-simulations)
 holds 109,248 simulated windows. Each is 30 Mb of sequence sampled from 64 diploid individuals,
 with sequencing-like errors already applied, and each comes with its true size history. The
 [corpus explorer](../explorer/) searches and downloads them.
 
-![What the corpus covers](../../../assets/figures/simulations_overview.png)
-
-**a**, Eight training windows drawn at random from each of the twelve families of size history,
-with the number of windows in each family. Each line is a window's 64 interval labels, drawn
-through the interval centres. **b**, Windows by the type of map stored with them. Every window
-carries sequencing-like errors except those with constant maps at the baseline rates. **c**,
-Variant sites per window, false sites included.
+<Figure src={simulationsOverviewFigure} alt="What the corpus covers">
+  **a**, Eight training windows drawn at random from each of the twelve families of size history,
+  with the number of windows in each family. Each line is a window's 64 interval labels, drawn
+  through the interval centres. **b**, Windows by the type of map stored with them. Every window
+  carries sequencing-like errors except those with constant maps at the baseline rates. **c**,
+  Variant sites per window, false sites included.
+</Figure>
 
 ## How the windows were simulated
 

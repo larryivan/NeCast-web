@@ -3,14 +3,17 @@ title: Trained network
 description: The weights of NeCast, its training record and the networks it is compared with in the paper.
 ---
 
+import Figure from '../../components/Figure.astro';
+import modelTrainingFigure from '../../assets/figures/model_training.png';
+
 The weights are on Hugging Face as [`Larrivhan/NeCast`](https://huggingface.co/Larrivhan/NeCast).
 
-![Training and test error](../../assets/figures/model_training.png)
-
-**a**, Training and validation error after each of the 12 epochs; the validation windows are 500
-further training windows. **b**, Test error in each of the 64 intervals (5-interval running mean),
-with the error over all intervals as a dotted line. **c**, The test windows at the 10th, 50th and
-90th percentiles of per-window error: truth (black step) and NeCast (blue).
+<Figure src={modelTrainingFigure} alt="Training and test error">
+  **a**, Training and validation error after each of the 12 epochs; the validation windows are 500
+  further training windows. **b**, Test error in each of the 64 intervals (5-interval running mean),
+  with the error over all intervals as a dotted line. **c**, The test windows at the 10th, 50th and
+  90th percentiles of per-window error: truth (black step) and NeCast (blue).
+</Figure>
 
 ## Files
 

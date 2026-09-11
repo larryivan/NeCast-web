@@ -3,15 +3,18 @@ title: Benchmark
 description: The simulated benchmark on which NeCast is compared with phlash, SMC++, FitCoal and MSMC2.
 ---
 
+import Figure from '../../../components/Figure.astro';
+import benchmarkHistoriesFigure from '../../../assets/figures/benchmark_histories.png';
+
 [`Larrivhan/NeCast-benchmark`](https://huggingface.co/datasets/Larrivhan/NeCast-benchmark) holds the
 true histories, the simulated windows, the exact inputs each method received, every estimate, the
 scores, the timing runs, eight-window joint fits, and twelve scenarios with population structure.
 
-![The 33 histories](../../../assets/figures/benchmark_histories.png)
-
-**The 33 histories**, as the 64-interval curves every method is scored against, ordered by family:
-human and other realistic models, bottlenecks, steps and slow changes, constant sizes,
-oscillations. The 12 marked a2 are also in setting `a2`; all 33 are in `a1` and `b`.
+<Figure src={benchmarkHistoriesFigure} alt="The 33 histories">
+  **The 33 histories**, as the 64-interval curves every method is scored against, ordered by family:
+  human and other realistic models, bottlenecks, steps and slow changes, constant sizes,
+  oscillations. The 12 marked a2 are also in setting `a2`; all 33 are in `a1` and `b`.
+</Figure>
 
 ## Three settings
 

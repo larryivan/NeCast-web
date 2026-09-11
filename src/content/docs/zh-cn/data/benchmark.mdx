@@ -3,11 +3,14 @@ title: 基准
 description: NeCast 与 phlash、SMC++、FitCoal 和 MSMC2 比较所用的模拟基准。
 ---
 
+import Figure from '../../../../components/Figure.astro';
+import benchmarkHistoriesZhFigure from '../../../../assets/figures/benchmark_histories_zh.png';
+
 [`Larrivhan/NeCast-benchmark`](https://huggingface.co/datasets/Larrivhan/NeCast-benchmark) 包含真实历史、模拟窗口、给每个方法的原始输入、全部估计、评分、计时实验、8 个窗口的联合拟合，以及 12 个带群体结构的场景。
 
-![33 条历史](../../../../assets/figures/benchmark_histories.png)
-
-**33 条历史**，画的是每个方法评分时对照的 64 区间曲线，按类别排列：人类及其他现实模型、瓶颈、阶跃和缓慢变化、恒定大小、振荡。标有 a2 的 12 条也属于设置 `a2`；33 条全部属于 `a1` 和 `b`。
+<Figure src={benchmarkHistoriesZhFigure} alt="33 条历史">
+  **33 条历史**，画的是每个方法评分时对照的 64 区间曲线，按类别排列：人类及其他现实模型、瓶颈、阶跃和缓慢变化、恒定大小、振荡。标有 a2 的 12 条也属于设置 `a2`；33 条全部属于 `a1` 和 `b`。
+</Figure>
 
 ## 三种设置
 
