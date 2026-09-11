@@ -1,0 +1,58 @@
+---
+title: 数据集与下载
+description: Hugging Face 上的四个 NeCast 仓库，以及怎样下载全部或其中一部分。
+---
+
+import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+
+NeCast 论文用到的所有数据都以 CC BY 4.0 协议发布在 Hugging Face。每个仓库都有一份说明卡片，逐一说明每个文件；还有一个 `SHA256SUMS` 文件，给出每个文件的校验值。
+
+| 仓库 | 内容 | 大小 |
+|---|---|---|
+| [`Larrivhan/NeCast-simulations`](https://huggingface.co/datasets/Larrivhan/NeCast-simulations) | 109,248 个模拟窗口及其真实历史、网络的输入文件和模拟器（[详情](simulations/)，[浏览器](explorer/)） | 647 GB |
+| [`Larrivhan/NeCast-benchmark`](https://huggingface.co/datasets/Larrivhan/NeCast-benchmark) | 三种设置下的 33 条历史：窗口、给每个方法的输入、全部估计和评分（[详情](benchmark/)） | 24 GB |
+| [`Larrivhan/NeCast-1000G`](https://huggingface.co/datasets/Larrivhan/NeCast-1000G) | 千人基因组计划 25 个人群在 51 个窗口上的分析，以及低深度对比（[详情](1000g/)） | 196 GB |
+| [`Larrivhan/NeCast`](https://huggingface.co/Larrivhan/NeCast) | 训练好的网络、训练记录和对照实验的网络（[详情](../model/)） | 0.8 GB |
+
+## 下载
+
+[语料浏览器](explorer/)可以为任意一组窗口生成下载脚本。直接下载文件的方法：
+
+<Tabs syncKey="download">
+  <TabItem label="Python">
+    ```python
+    from huggingface_hub import hf_hub_download, snapshot_download
+
+    # 一个文件
+    path = hf_hub_download("Larrivhan/NeCast-simulations", "index/windows.parquet", repo_type="dataset")
+
+    # 仓库的一部分
+    snapshot_download("Larrivhan/NeCast-benchmark", repo_type="dataset",
+                      allow_patterns=["histories/*", "results/*"], local_dir="necast-benchmark")
+    ```
+  </TabItem>
+  <TabItem label="命令行">
+    ```bash
+    pip install -U huggingface_hub
+    hf download Larrivhan/NeCast-simulations index/windows.parquet --repo-type dataset --local-dir necast-simulations
+    hf download Larrivhan/NeCast-benchmark --repo-type dataset --include "histories/*" --local-dir necast-benchmark
+    ```
+  </TabItem>
+</Tabs>
+
+<Aside type="tip" title="在中国大陆">
+  huggingface.co 经常无法访问。运行上面的命令前设置 `HF_ENDPOINT=https://hf-mirror.com`，或者把下载链接里的 `huggingface.co` 换成 `hf-mirror.com`。
+</Aside>
+
+## 校验
+
+把 `SHA256SUMS` 和数据一起下载，然后校验已有的文件：
+
+```bash
+cd necast-simulations
+sha256sum --check --ignore-missing SHA256SUMS
+```
+
+## 协议
+
+数据和权重以 CC BY 4.0 发布，模拟器代码以 MIT 发布。模拟器用到的第三方文件（deCODE 和 Roulette 图谱、已发表的人类历史、stdpopsim 轨迹）没有复制进来；每个仓库都列出了它们的来源、校验值和构建脚本。
