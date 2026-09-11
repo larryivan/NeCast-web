@@ -16,6 +16,9 @@ export default defineConfig({
       description:
         'NeCast estimates the size history of a population from 32 unphased genomes and the recombination and mutation maps of their window.',
       favicon: '/favicon.svg',
+      logo: { src: './src/assets/logo.svg', alt: 'NeCast' },
+      // the home-page hero draws a real training window instead of an image
+      components: { Hero: './src/components/overrides/Hero.astro' },
       defaultLocale: 'root',
       locales: {
         root: { label: 'English', lang: 'en' },
@@ -27,7 +30,8 @@ export default defineConfig({
       plugins: [starlightLinksValidator({ errorOnRelativeLinks: false })],
       sidebar: [
         {
-          label: 'NeCast',
+          label: 'Method',
+          translations: { 'zh-CN': '方法' },
           items: [{ slug: 'method' }, { slug: 'model' }],
         },
         {

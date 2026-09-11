@@ -1,0 +1,115 @@
+---
+// Starlight's hero, with the data-driven visual of a real training window in place of an image.
+// Title, tagline and actions still come from the page's frontmatter, in each language.
+import { LinkButton } from '@astrojs/starlight/components';
+import HeroVisual from '../home/HeroVisual.astro';
+
+const { data } = Astro.locals.starlightRoute.entry;
+const lang = Astro.locals.starlightRoute.lang;
+const { title = data.title, tagline, actions = [] } = data.hero || {};
+const zh = lang?.toLowerCase().startsWith('zh');
+const eyebrow = zh ? '用模拟数据训练的神经网络 · 群体遗传学' : 'A neural network trained on simulations · population genetics';
+const visualLabel = zh
+  ? '一个真实的训练窗口：32 个个体在 48 个变异位点上的基因型，经过五路输入，得到该窗口 64 个区间上的群体大小历史。'
+  : 'A real training window: the genotypes of 32 individuals at 48 variant sites pass through five streams to the window’s size history on 64 intervals.';
+---
+
+<div class="hero">
+  <div class="visual">
+    <HeroVisual label={visualLabel} />
+  </div>
+  <div class="sl-flex stack">
+    <div class="sl-flex copy">
+      <p class="eyebrow">{eyebrow}</p>
+      <h1 id="_top" data-page-title set:html={title} />
+      {tagline && <div class="tagline" set:html={tagline} />}
+    </div>
+    {
+      actions.length > 0 && (
+        <div class="sl-flex actions">
+          {actions.map(({ attrs: { class: className, ...attrs } = {}, icon, link: href, text, variant }) => (
+            <LinkButton {href} {variant} icon={icon?.name} class:list={[className]} {...attrs}>
+              {text}
+              {icon?.html && <Fragment set:html={icon.html} />}
+            </LinkButton>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</div>
+
+<style>
+  @layer starlight.core {
+    .hero {
+      display: grid;
+      grid-template-columns: 100%;
+      align-items: center;
+      gap: 1.5rem;
+      padding-bottom: 1rem;
+    }
+    .visual {
+      width: min(100%, 32rem);
+      margin-inline: auto;
+    }
+    .stack {
+      flex-direction: column;
+      gap: clamp(1.5rem, calc(1.5rem + 1vw), 2rem);
+      text-align: center;
+    }
+    .copy {
+      flex-direction: column;
+      gap: 0.9rem;
+      align-items: center;
+    }
+    .copy > * {
+      max-width: 46ch;
+    }
+    .eyebrow {
+      margin: 0;
+      font-size: var(--sl-text-xs);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sl-color-accent);
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(var(--sl-text-4xl), calc(0.25rem + 6vw), 4.5rem);
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--sl-color-white);
+    }
+    .tagline {
+      font-size: clamp(var(--sl-text-base), calc(0.0625rem + 2vw), var(--sl-text-xl));
+      line-height: 1.5;
+      color: var(--sl-color-gray-2);
+    }
+    .actions {
+      gap: 1rem 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    @media (min-width: 50rem) {
+      .hero {
+        grid-template-columns: 5fr 6fr;
+        gap: 4%;
+        padding-block: clamp(2.5rem, calc(1rem + 8vmin), 7rem);
+      }
+      .visual {
+        order: 2;
+        width: 100%;
+      }
+      .stack {
+        text-align: start;
+      }
+      .copy {
+        align-items: flex-start;
+      }
+      .actions {
+        justify-content: flex-start;
+      }
+    }
+  }
+</style>
