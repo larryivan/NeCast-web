@@ -1,9 +1,50 @@
-# DLCoalSim Web
+# NeCast website
 
-Static browser for DLCoalSim dataset metadata and sample previews.
+The website of NeCast: what the method does, the data behind the paper, and a browser for the
+109,248 simulated windows. It is a static site, published with GitHub Pages at
+<https://larryivan.github.io/NeCast-web/>, in English and Simplified Chinese.
 
-**Live**: https://larryivan.github.io/DLCoalSim-Web/
+The data themselves are on Hugging Face (`Larrivhan/NeCast-simulations`, `Larrivhan/NeCast-benchmark`,
+`Larrivhan/NeCast-1000G`, and the network `Larrivhan/NeCast`).
 
-**Data**: [Larrivhan/DLCoalSim-10Mb-v1](https://huggingface.co/datasets/Larrivhan/DLCoalSim-10Mb-v1) on Hugging Face
+## Stack
 
-**Stack**: Vue 3 + TypeScript + ECharts + Vite
+- [Astro](https://astro.build) with [Starlight](https://starlight.astro.build) for pages, navigation,
+  search (Pagefind) and the two languages.
+- React for the corpus explorer only; every other page ships no framework code.
+- [hyparquet](https://github.com/hyparam/hyparquet) reads the window index in the browser,
+  [TanStack Table](https://tanstack.com/table) and [TanStack Virtual](https://tanstack.com/virtual)
+  show it, and [Observable Plot](https://observablehq.com/plot/) draws the charts.
+- [shadcn/ui](https://ui.shadcn.com) components and Tailwind CSS, with colours taken from
+  Starlight's theme so light and dark modes match.
+- System fonts only; nothing is loaded from Google or other font services.
+
+## Layout
+
+| path | contents |
+|---|---|
+| `src/content/docs/` | the pages, in Markdown (MDX); Chinese pages under `zh-cn/` |
+| `src/components/explorer/` | the corpus explorer |
+| `src/components/ui/` | shadcn/ui components |
+| `src/styles/global.css` | Starlight, Tailwind and shadcn styles |
+| `src/assets/figures/` | the figures of the pages (drawn in R with the paper's style) |
+| `public/data/explorer/` | the explorer's index: `windows.parquet`, the labels, `summary.json` |
+| `scripts/build_explorer_data.py` | builds `public/data/explorer/` from the released corpus |
+
+## Working on it
+
+```bash
+npm install
+npm run dev        # http://localhost:4321/NeCast-web/
+npm run build      # into dist/, with a check of every internal link
+```
+
+The explorer's index is rebuilt from a copy of `NeCast-simulations` (the index and the window files):
+
+```bash
+python scripts/build_explorer_data.py --corpus <NeCast-simulations> --out public/data/explorer
+```
+
+## Licence
+
+Code: MIT. Text and figures: CC BY 4.0.
