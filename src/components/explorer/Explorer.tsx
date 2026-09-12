@@ -10,7 +10,7 @@ import {
   tableFeatures,
   useTable,
 } from '@tanstack/react-table';
-import { ArrowDown, ArrowUp, ArrowUpDown, Check, Copy, Download, SlidersHorizontal } from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, Check, Copy, Download, ExternalLink, Link2, SlidersHorizontal } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -61,18 +61,18 @@ function downloadText(name: string, text: string) {
   setTimeout(() => URL.revokeObjectURL(url), 2000);
 }
 
-function CopyButton({ text, label, done }: { text: string; label: string; done: string }) {
+function CopyButton({ text, label, done, icon }: { text: string | (() => string); label: string; done: string; icon?: React.ReactNode }) {
   const [copied, setCopied] = useState(false);
   return (
     <Button
       variant="outline"
       size="sm"
-      onClick={() => navigator.clipboard.writeText(text).then(() => {
+      onClick={() => navigator.clipboard.writeText(typeof text === 'function' ? text() : text).then(() => {
         setCopied(true);
         setTimeout(() => setCopied(false), 1500);
       })}
     >
-      {copied ? <Check /> : <Copy />}
+      {copied ? <Check /> : (icon ?? <Copy />)}
       {copied ? done : label}
     </Button>
   );
@@ -359,8 +359,21 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
     );
   if (!data)
     return (
-      <div className="necast-ui not-content flex h-64 items-center justify-center rounded-lg border text-sm text-muted-foreground">
-        {t.loading}
+      <div className="necast-ui not-content grid gap-6 lg:grid-cols-[16.5rem_minmax(0,1fr)]" aria-busy="true">
+        <div className="hidden flex-col gap-3 lg:flex">
+          {Array.from({ length: 12 }, (_, i) => (
+            <div key={i} className="h-4 animate-pulse rounded bg-muted" style={{ width: `${60 + ((i * 37) % 35)}%` }} />
+          ))}
+        </div>
+        <div className="flex flex-col gap-4">
+          <p className="m-0 text-sm text-muted-foreground">{t.loading}</p>
+          <div className="h-32 animate-pulse rounded-lg bg-muted" />
+          <div className="flex flex-col gap-2 rounded-lg border p-3">
+            {Array.from({ length: 8 }, (_, i) => (
+              <div key={i} className="h-5 animate-pulse rounded bg-muted" />
+            ))}
+          </div>
+        </div>
       </div>
     );
 
@@ -539,6 +552,20 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
                   <Badge variant="secondary">{GROUPS[GROUP_OF[cols.split[sel] * 4 + cols.stage[sel]]].name[lang]}</Badge>
                   <Badge variant="outline">{cols.map[sel] === 0 ? t.withoutErrors : t.withErrors}</Badge>
                 </SheetDescription>
+                <div className="flex flex-wrap gap-2 pt-2">
+                  <CopyButton
+                    text={() => `${window.location.origin}${window.location.pathname}?w=${selWindow}`}
+                    label={t.copyLink}
+                    done={t.linkCopied}
+                    icon={<Link2 />}
+                  />
+                  <Button asChild size="sm" variant="ghost">
+                    <a href={`https://huggingface.co/datasets/${REPO}/viewer/index/train?search=${sampleId(selWindow)}`} target="_blank" rel="noreferrer">
+                      <ExternalLink />
+                      {t.metadata}
+                    </a>
+                  </Button>
+                </div>
               </SheetHeader>
               <div className="flex flex-col gap-5 px-4 pb-6">
                 <div>

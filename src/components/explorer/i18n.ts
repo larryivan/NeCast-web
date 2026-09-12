@@ -104,6 +104,9 @@ export const T = {
     sitesUnit: 'variant sites',
     neRange: 'Ne range of the labels',
     histNote: 'Blue: the selected windows. Grey: all windows, scaled to the same height.',
+    copyLink: 'Copy link',
+    linkCopied: 'Link copied',
+    metadata: 'All metadata on Hugging Face',
   },
   zh: {
     loading: '正在载入 109,248 个窗口的索引……',
@@ -152,6 +155,9 @@ export const T = {
     sitesUnit: '个变异位点',
     neRange: '标签的 Ne 范围',
     histNote: '蓝色为所选窗口，灰色为全部窗口（缩放到同一高度）。',
+    copyLink: '复制链接',
+    linkCopied: '已复制链接',
+    metadata: '在 Hugging Face 查看全部元数据',
   },
 } as const;
 
