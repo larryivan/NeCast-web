@@ -4,8 +4,11 @@ description: NeCast 读什么、网络怎样组合这些输入、输出什么，
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Architecture from '../../../components/method/Architecture.astro';
 
 NeCast 从一个基因组窗口估计群体的大小历史。它读取 30 Mb 可及序列上 32 个二倍体个体的未定相基因型，以及为该窗口估计的重组图谱和突变图谱，输出 64 个时间区间上的 log₁₀ N<sub>e</sub>；这些区间在距今 50 到 500,000 代之间按对数时间均匀排列。一个窗口在 CPU 上只需几秒。
+
+<Architecture lang="zh" />
 
 ## 同一批位点上的五路输入
 

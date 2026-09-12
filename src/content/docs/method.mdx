@@ -4,12 +4,15 @@ description: What NeCast reads, how the network combines it, what it returns and
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Architecture from '../../components/method/Architecture.astro';
 
 NeCast estimates the size history of a population from one window of genome sequence. It reads
 the unphased genotypes of 32 diploid individuals in 30 Mb of accessible sequence, together with
 the recombination and mutation maps estimated for that window, and returns log₁₀ N<sub>e</sub> on
 64 time intervals evenly spaced in log time between 50 and 500,000 generations ago. A window takes
 seconds on a CPU.
+
+<Architecture lang="en" />
 
 ## Five streams over the same sites
 
