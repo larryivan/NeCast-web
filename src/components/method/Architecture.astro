@@ -1,7 +1,8 @@
 ---
 // How a window becomes a size history: the input feeds five streams over the same sites, the
 // network combines them into a correction on each interval, and the correction is added to a
-// baseline from the window's Watterson estimate. Drawn as inline SVG in theme colours.
+// baseline from the window's Watterson estimate. Drawn as inline SVG in theme colours, left to
+// right on wide columns and top to bottom on narrow ones.
 import windowData from '../../data/hero_window.json';
 
 interface Props {
@@ -14,11 +15,11 @@ const T = {
     input: 'One window',
     inputLines: ['32 unphased genomes', '30 Mb of sequence', 'recombination map', 'mutation map'],
     streams: [
-      ['Site encoder', 'every site, placed on both maps'],
-      ['Site-frequency spectrum', 'folded, over the 32 genomes'],
-      ['Linkage disequilibrium', '1 to 64 sites apart, by map distance'],
-      ['Identity-by-state tracts', 'length spectra of 496 pairs'],
-      ['PSMC+ posterior', 'per genome with both maps, pooled'],
+      'Site encoder',
+      'Site-frequency spectrum',
+      'Linkage disequilibrium',
+      'Identity-by-state tracts',
+      'PSMC+ posterior',
     ],
     network: 'Network',
     networkSub: ['a correction', 'per interval'],
@@ -26,6 +27,7 @@ const T = {
     baselineSub: ['Watterson level', '+ a fixed offset'],
     output: 'log₁₀ Nₑ',
     outputSub: ['64 intervals', '50 to 500,000', 'generations ago'],
+    outputSubTall: ['64 intervals', '50 to 500,000 generations ago'],
     caption:
       'Every stream reads the same variant sites. The maps are used in two ways: the site encoder and linkage disequilibrium measure distances along them, and PSMC+ decodes each genome with them.',
   },
@@ -33,23 +35,23 @@ const T = {
     aria: '示意图：一个窗口的基因型和图谱进入五路输入；网络把它们合成为 64 个区间上的校正量，加到由 Watterson 估计得到的基线上，得到 log10 Ne。',
     input: '一个窗口',
     inputLines: ['32 个未定相基因组', '30 Mb 序列', '重组图谱', '突变图谱'],
-    streams: [
-      ['位点编码器', '每个位点，按两张图谱定位'],
-      ['位点频率谱', '折叠，32 个基因组'],
-      ['连锁不平衡', '相隔 1 到 64 个位点，按图谱距离'],
-      ['状态同一片段', '496 对个体的长度谱'],
-      ['PSMC+ 后验', '每个基因组用两张图谱解码后汇总'],
-    ],
+    streams: ['位点编码器', '位点频率谱', '连锁不平衡', '状态同一片段', 'PSMC+ 后验'],
     network: '网络',
     networkSub: ['每个区间的', '校正量'],
     baseline: '基线',
     baselineSub: ['Watterson 水平', '+ 固定偏移'],
     output: 'log₁₀ Nₑ',
     outputSub: ['64 个区间', '距今 50 到', '500,000 代'],
+    outputSubTall: ['64 个区间', '距今 50 到 500,000 代'],
     caption: '五路输入读取的是同一批变异位点。图谱有两种用法：位点编码器和连锁不平衡沿图谱度量距离，PSMC+ 用它们解码每个基因组。',
   },
 }[lang];
 
+// a small genotype glyph from the same real window as the home page
+const glyph = windowData.genotypes.slice(0, 6).map((row) => row.slice(10, 25));
+const cell = 9.2;
+
+// wide layout, left to right
 const W = 800;
 const H = 330;
 const box = { x: 8, y: 80, w: 170, h: 170 };
@@ -67,15 +69,29 @@ const curve = (x1: number, y1: number, x2: number, y2: number) => {
   const dx = (x2 - x1) * 0.5;
   return `M${x1},${y1} C${x1 + dx},${y1} ${x2 - dx},${y2} ${x2},${y2}`;
 };
-// a small genotype glyph from the same real window as the home page
-const glyph = windowData.genotypes.slice(0, 6).map((row) => row.slice(10, 25));
+
+// tall layout, top to bottom: a bus on the left feeds the streams, a bus on the right collects them
+const TW = 360;
+const TH = 598;
+const tIn = { x: 8, y: 8, w: 344, h: 104 };
+const tsx = 44;
+const tsw = 272;
+const tsh = 38;
+const tMid = (i: number) => 132 + i * (tsh + 8) + tsh / 2;
+const busL = 24;
+const busR = 336;
+const tBase = { x: 8, y: 392, w: 172, h: 72 };
+const tNet = { x: 200, y: 392, w: 152, h: 72 };
+const tOut = { x: 8, y: 504, w: 344, h: 86 };
+const tNetMid = tNet.x + tNet.w / 2;
+const tBaseMid = tBase.x + tBase.w / 2;
 ---
 
 <figure class="architecture not-content">
   <div class="scroll">
-    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={T.aria}>
+    <svg class="wide" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={T.aria}>
       <defs>
-        <marker id="arch-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <marker id="arch-arrow-wide" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" class="arrowhead" />
         </marker>
       </defs>
@@ -86,7 +102,7 @@ const glyph = windowData.genotypes.slice(0, 6).map((row) => row.slice(10, 25));
       {
         glyph.map((row, r) =>
           [...row].map((g, c) => (
-            <rect x={box.x + 16 + c * 9.2} y={box.y + 42 + r * 9.2} width="7.6" height="7.6" rx="1.4" class={g === 'm' ? 'gm' : `g${g}`} />
+            <rect x={box.x + 16 + c * cell} y={box.y + 42 + r * cell} width="7.6" height="7.6" rx="1.4" class={g === 'm' ? 'gm' : `g${g}`} />
           )),
         )
       }
@@ -98,15 +114,15 @@ const glyph = windowData.genotypes.slice(0, 6).map((row) => row.slice(10, 25));
 
       <!-- streams: titles only; the list below the figure describes each -->
       {
-        T.streams.map(([title], i) => {
+        T.streams.map((title, i) => {
           const y = s0 + i * (sh + sgap);
           const yc = y + sh / 2;
           return (
             <g>
-              <path d={curve(box.x + box.w, midIn, sx - 4, yc)} class="link" marker-end="url(#arch-arrow)" />
+              <path d={curve(box.x + box.w, midIn, sx - 4, yc)} class="link" marker-end="url(#arch-arrow-wide)" />
               <rect x={sx} y={y} width={sw} height={sh} rx="10" class="stream" />
               <text x={sx + 16} y={yc + 5} class="title small">{title}</text>
-              <path d={curve(sx + sw, yc, net.x - 4, netMid)} class="link" marker-end="url(#arch-arrow)" />
+              <path d={curve(sx + sw, yc, net.x - 4, netMid)} class="link" marker-end="url(#arch-arrow-wide)" />
             </g>
           );
         })
@@ -129,13 +145,83 @@ const glyph = windowData.genotypes.slice(0, 6).map((row) => row.slice(10, 25));
       ))}
 
       <!-- sum and output -->
-      <path d={`M${net.x + net.w},${netMid} L${out.x - 4},${out.y + 40}`} class="link strong" marker-end="url(#arch-arrow)" />
-      <path d={`M${base.x + base.w},${base.y + base.h / 2} L${out.x - 4},${out.y + out.h - 28}`} class="link strong" marker-end="url(#arch-arrow)" />
+      <path d={`M${net.x + net.w},${netMid} L${out.x - 4},${out.y + 40}`} class="link strong" marker-end="url(#arch-arrow-wide)" />
+      <path d={`M${base.x + base.w},${base.y + base.h / 2} L${out.x - 4},${out.y + out.h - 28}`} class="link strong" marker-end="url(#arch-arrow-wide)" />
       <text x={base.x + base.w + 26} y={base.y + base.h / 2 - 6} class="plus" text-anchor="middle">+</text>
       <rect x={out.x} y={out.y} width={out.w} height={out.h} rx="12" class="output" />
       <text x={out.x + out.w / 2} y={out.y + 38} class="big" text-anchor="middle">{T.output}</text>
       {T.outputSub.map((line, i) => (
         <text x={out.x + out.w / 2} y={out.y + 64 + i * 16} class="sub tiny" text-anchor="middle">
+          {line}
+        </text>
+      ))}
+    </svg>
+
+    <svg class="tall" viewBox={`0 0 ${TW} ${TH}`} role="img" aria-label={T.aria}>
+      <defs>
+        <marker id="arch-arrow-tall" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" class="arrowhead" />
+        </marker>
+      </defs>
+
+      <!-- input -->
+      <rect x={tIn.x} y={tIn.y} width={tIn.w} height={tIn.h} rx="12" class="panel" />
+      <text x={tIn.x + 16} y={tIn.y + 26} class="title">{T.input}</text>
+      {
+        glyph.map((row, r) =>
+          [...row].map((g, c) => (
+            <rect x={tIn.x + 16 + c * cell} y={tIn.y + 38 + r * cell} width="7.6" height="7.6" rx="1.4" class={g === 'm' ? 'gm' : `g${g}`} />
+          )),
+        )
+      }
+      {T.inputLines.map((line, i) => (
+        <text x={tIn.x + 172} y={tIn.y + 46 + i * 16} class={i < 2 ? 'sub strong' : 'sub'}>
+          {line}
+        </text>
+      ))}
+
+      <!-- streams -->
+      <path d={`M${busL},${tIn.y + tIn.h} V${tMid(4)}`} class="link" />
+      {
+        T.streams.map((title, i) => (
+          <g>
+            <path d={`M${busL},${tMid(i)} H${tsx - 4}`} class="link" marker-end="url(#arch-arrow-tall)" />
+            <rect x={tsx} y={tMid(i) - tsh / 2} width={tsw} height={tsh} rx="10" class="stream" />
+            <text x={tsx + 16} y={tMid(i) + 5} class="title small">{title}</text>
+            <path d={`M${tsx + tsw},${tMid(i)} H${busR}`} class="link" />
+          </g>
+        ))
+      }
+      <path
+        d={`M${busR},${tMid(0)} V${tMid(4)} C${busR},${tMid(4) + 40} ${tNetMid},${tNet.y - 32} ${tNetMid},${tNet.y - 4}`}
+        class="link"
+        marker-end="url(#arch-arrow-tall)"
+      />
+
+      <!-- baseline and network -->
+      <rect x={tBase.x} y={tBase.y} width={tBase.w} height={tBase.h} rx="10" class="panel" />
+      <text x={tBaseMid} y={tBase.y + 26} class="title small" text-anchor="middle">{T.baseline}</text>
+      {T.baselineSub.map((line, i) => (
+        <text x={tBaseMid} y={tBase.y + 45 + i * 15} class="sub tiny" text-anchor="middle">
+          {line}
+        </text>
+      ))}
+      <rect x={tNet.x} y={tNet.y} width={tNet.w} height={tNet.h} rx="12" class="network" />
+      <text x={tNetMid} y={tNet.y + 28} class="title invert" text-anchor="middle">{T.network}</text>
+      {T.networkSub.map((line, i) => (
+        <text x={tNetMid} y={tNet.y + 47 + i * 15} class="sub tiny invert" text-anchor="middle">
+          {line}
+        </text>
+      ))}
+
+      <!-- sum and output -->
+      <path d={`M${tBaseMid},${tBase.y + tBase.h} V${tOut.y - 4}`} class="link strong" marker-end="url(#arch-arrow-tall)" />
+      <path d={`M${tNetMid},${tNet.y + tNet.h} V${tOut.y - 4}`} class="link strong" marker-end="url(#arch-arrow-tall)" />
+      <text x={(tBaseMid + tNetMid) / 2} y={tOut.y - 14} class="plus" text-anchor="middle">+</text>
+      <rect x={tOut.x} y={tOut.y} width={tOut.w} height={tOut.h} rx="12" class="output" />
+      <text x={tOut.x + tOut.w / 2} y={tOut.y + 34} class="big" text-anchor="middle">{T.output}</text>
+      {T.outputSubTall.map((line, i) => (
+        <text x={tOut.x + tOut.w / 2} y={tOut.y + 56 + i * 16} class="sub tiny" text-anchor="middle">
           {line}
         </text>
       ))}
@@ -146,6 +232,7 @@ const glyph = windowData.genotypes.slice(0, 6).map((row) => row.slice(10, 25));
 
 <style>
   .architecture {
+    container-type: inline-size;
     margin-block: 1.5rem 2rem;
   }
   .scroll {
@@ -154,10 +241,26 @@ const glyph = windowData.genotypes.slice(0, 6).map((row) => row.slice(10, 25));
   svg {
     display: block;
     width: 100%;
-    min-width: 36rem;
     height: auto;
     color: var(--sl-color-gray-2);
     font-family: var(--__sl-font);
+  }
+  .wide {
+    min-width: 36rem;
+  }
+  .tall {
+    display: none;
+    max-width: 26rem;
+    margin-inline: auto;
+  }
+  /* narrower than the wide drawing: switch to the top-to-bottom one instead of scrolling */
+  @container (width < 36rem) {
+    .wide {
+      display: none;
+    }
+    .tall {
+      display: block;
+    }
   }
   .panel {
     fill: color-mix(in srgb, var(--sl-color-gray-6) 70%, var(--sl-color-bg));
