@@ -15,6 +15,17 @@ that describes every file, and a `SHA256SUMS` file with a checksum for every fil
 | [`Larrivhan/NeCast-1000G`](https://huggingface.co/datasets/Larrivhan/NeCast-1000G) | 25 populations of the 1000 Genomes Project on 51 windows, and the low-coverage comparison ([details](1000g/)) | 196 GB |
 | [`Larrivhan/NeCast`](https://huggingface.co/Larrivhan/NeCast) | the trained network, its training record and the networks of the comparisons ([details](../model/)) | 0.8 GB |
 
+## Which files do I need?
+
+| to… | download |
+|---|---|
+| train or test a method on the simulations | `NeCast-simulations`: windows picked in the [explorer](explorer/) or all of `windows/`, with `index/windows.parquet` and `splits/` |
+| reuse NeCast's inputs (summaries, PSMC+ posteriors) | `NeCast-simulations`: `features/` |
+| run a method on the benchmark | `NeCast-benchmark`: `method_inputs/` (the files each method read) and `histories/` (the truth) |
+| compare estimates with NeCast and the other methods | `NeCast-benchmark`: `estimates/` and `scores/` |
+| reproduce the 1000 Genomes curves | `NeCast-1000G`: `populations_25/results/` |
+| load the trained network | `NeCast`: `final/checkpoint.pt` |
+
 ## Downloading
 
 The [corpus explorer](explorer/) writes a download script for any selection of windows. To fetch
