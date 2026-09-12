@@ -130,9 +130,9 @@ const tBaseMid = tBase.x + tBase.w / 2;
 
       <!-- network and baseline -->
       <rect x={net.x} y={net.y} width={net.w} height={net.h} rx="12" class="network" />
-      <text x={net.x + net.w / 2} y={net.y + 30} class="title invert" text-anchor="middle">{T.network}</text>
+      <text x={net.x + net.w / 2} y={net.y + 30} class="title on-accent" text-anchor="middle">{T.network}</text>
       {T.networkSub.map((line, i) => (
-        <text x={net.x + net.w / 2} y={net.y + 50 + i * 15} class="sub tiny invert" text-anchor="middle">
+        <text x={net.x + net.w / 2} y={net.y + 50 + i * 15} class="sub tiny on-accent" text-anchor="middle">
           {line}
         </text>
       ))}
@@ -207,9 +207,9 @@ const tBaseMid = tBase.x + tBase.w / 2;
         </text>
       ))}
       <rect x={tNet.x} y={tNet.y} width={tNet.w} height={tNet.h} rx="12" class="network" />
-      <text x={tNetMid} y={tNet.y + 28} class="title invert" text-anchor="middle">{T.network}</text>
+      <text x={tNetMid} y={tNet.y + 28} class="title on-accent" text-anchor="middle">{T.network}</text>
       {T.networkSub.map((line, i) => (
-        <text x={tNetMid} y={tNet.y + 47 + i * 15} class="sub tiny invert" text-anchor="middle">
+        <text x={tNetMid} y={tNet.y + 47 + i * 15} class="sub tiny on-accent" text-anchor="middle">
           {line}
         </text>
       ))}
@@ -297,7 +297,7 @@ const tBaseMid = tBase.x + tBase.w / 2;
     fill: var(--sl-color-gray-2);
     font-weight: 600;
   }
-  .invert {
+  .on-accent {
     fill: var(--sl-color-text-invert);
   }
   .big {

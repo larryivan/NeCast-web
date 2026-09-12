@@ -78,8 +78,8 @@ const streams = [0.1, 0.3, 0.5, 0.7, 0.9].map((f) => {
     <path d={`M${mergeX + 4},${mergeY} L${px0 - 8},${mergeY}`} pathLength="1" />
   </g>
   <g class="plot">
-    {decadesNe.map((d) => <line x1={px0} x2={px1} y1={sy(d)} y2={sy(d)} class="grid" />)}
-    {decadesT.map((d) => <line x1={sx(10 ** d)} x2={sx(10 ** d)} y1={py0} y2={py1} class="grid" />)}
+    {decadesNe.map((d) => <line x1={px0} x2={px1} y1={sy(d)} y2={sy(d)} class="gridline" />)}
+    {decadesT.map((d) => <line x1={sx(10 ** d)} x2={sx(10 ** d)} y1={py0} y2={py1} class="gridline" />)}
     <line x1={px0} x2={px0} y1={py0} y2={py1} class="axis" />
     <line x1={px0} x2={px1} y1={py1} y2={py1} class="axis" />
     <path d={area} class="area" />
@@ -115,7 +115,7 @@ const streams = [0.1, 0.3, 0.5, 0.7, 0.9].map((f) => {
   .streams circle {
     fill: var(--sl-color-accent);
   }
-  .grid {
+  .gridline {
     stroke: currentColor;
     stroke-width: 0.6;
     opacity: 0.35;
