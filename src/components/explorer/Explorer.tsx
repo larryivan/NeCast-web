@@ -43,7 +43,9 @@ const GROUP_OF = new Int8Array(16).fill(-1);
 GROUPS.forEach((g, i) => (GROUP_OF[g.split * 4 + g.stage] = i));
 
 const features = tableFeatures({ rowSortingFeature, sortedRowModel: createSortedRowModel(), sortFns: { basic: sortFn_basic } });
-const helper = createColumnHelper<typeof features, number>();
+// one table row per window, holding its index into the column arrays (the table wants objects)
+type WindowRow = { i: number };
+const helper = createColumnHelper<typeof features, WindowRow>();
 
 function parseQuery(text: string): number | null | undefined {
   const s = text.trim().toLowerCase();
@@ -198,14 +200,14 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
     const c = data.cols;
     const fam = data.summary.families;
     const mapKeys = data.summary.maps.map((m) => m.key);
-    return [
-      helper.accessor((i) => c.window[i], {
+    return helper.columns([
+      helper.accessor(({ i }) => c.window[i], {
         id: 'window',
         header: t.colWindow,
         sortFn: 'basic',
         cell: (info) => <span className="font-mono text-[0.8rem]">{sampleId(info.getValue() as number)}</span>,
       }),
-      helper.accessor((i) => c.family[i], {
+      helper.accessor(({ i }) => c.family[i], {
         id: 'family',
         header: t.colFamily,
         sortFn: 'basic',
@@ -219,7 +221,7 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
           );
         },
       }),
-      helper.accessor((i) => c.map[i], {
+      helper.accessor(({ i }) => c.map[i], {
         id: 'map',
         header: t.colMap,
         sortFn: 'basic',
@@ -228,7 +230,7 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
           return <span className="truncate" title={m[lang]}>{m.short[lang]}</span>;
         },
       }),
-      helper.accessor((i) => GROUP_OF[c.split[i] * 4 + c.stage[i]], {
+      helper.accessor(({ i }) => GROUP_OF[c.split[i] * 4 + c.stage[i]], {
         id: 'group',
         header: t.colGroup,
         sortFn: 'basic',
@@ -237,25 +239,26 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
           return <span className="truncate" title={g.name[lang]}>{g.short[lang]}</span>;
         },
       }),
-      helper.accessor((i) => c.sites[i], {
+      helper.accessor(({ i }) => c.sites[i], {
         id: 'sites',
         header: t.colSites,
         sortFn: 'basic',
         cell: (info) => <span className="tabular-nums">{formatInt(info.getValue() as number, lang)}</span>,
       }),
-      helper.accessor((i) => c.neMin[i], {
+      helper.accessor(({ i }) => c.neMin[i], {
         id: 'ne',
         header: t.colNe,
         sortFn: 'basic',
         cell: (info) => {
-          const i = info.row.original;
+          const { i } = info.row.original;
           return <span className="tabular-nums">{`${formatNe(c.neMin[i])}–${formatNe(c.neMax[i])}`}</span>;
         },
       }),
-    ];
+    ]);
   }, [data, lang, t]);
 
-  const table = useTable({ features, columns, data: result.rows });
+  const tableData = useMemo<WindowRow[]>(() => result.rows.map((i) => ({ i })), [result.rows]);
+  const table = useTable({ features, columns, data: tableData });
   const tableRows = table.getRowModel().rows;
   const scrollRef = useRef<HTMLDivElement>(null);
   const virtualizer = useVirtualizer({ count: tableRows.length, getScrollElement: () => scrollRef.current, estimateSize: () => 36, overscan: 14 });
@@ -513,12 +516,12 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
               <div className="relative" style={{ height: virtualizer.getTotalSize() }}>
                 {virtualizer.getVirtualItems().map((v) => {
                   const row = tableRows[v.index];
-                  const active = row.original === selected;
+                  const active = row.original.i === selected;
                   return (
                     <button
                       key={row.id}
                       type="button"
-                      onClick={() => setSelected(row.original)}
+                      onClick={() => setSelected(row.original.i)}
                       className={`${grid} absolute top-0 left-0 w-full border-b px-3 text-left text-sm hover:bg-accent/60 ${active ? 'bg-accent' : ''}`}
                       style={{ height: v.size, transform: `translateY(${v.start}px)` }}
                     >
