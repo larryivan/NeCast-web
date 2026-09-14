@@ -1,7 +1,7 @@
 ---
 // Starlight's hero, with the data-driven visual of a real training window in place of an image.
 // Title, tagline and actions still come from the page's frontmatter, in each language.
-import { LinkButton } from '@astrojs/starlight/components';
+import { Icon, LinkButton } from '@astrojs/starlight/components';
 import HeroVisual from '../home/HeroVisual.astro';
 
 const { data } = Astro.locals.starlightRoute.entry;
@@ -12,16 +12,27 @@ const eyebrow = zh ? '群体遗传学 · 深度学习' : 'Population genetics ·
 const visualLabel = zh
   ? '一个真实的训练窗口：32 个个体在 48 个变异位点上的基因型，经过五路输入，得到该窗口 64 个区间上的群体大小历史。'
   : 'A real training window: the genotypes of 32 individuals at 48 variant sites pass through five streams to the window’s size history on 64 intervals.';
+// the drawing is window 16 of the corpus; the caption opens it in the explorer
+const explorerHref = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}${zh ? 'zh-cn/' : ''}data/explorer/?w=16`;
+const caption = zh ? '在语料浏览器中打开这个窗口' : 'Open this window in the explorer';
 ---
 
 <div class="hero">
   <div class="visual">
     <HeroVisual label={visualLabel} />
+    <a class="caption" href={explorerHref}>
+      <code>sim_00000016</code>
+      <span>{caption}</span>
+      <Icon name="right-arrow" size="1em" />
+    </a>
   </div>
   <div class="sl-flex stack">
     <div class="sl-flex copy">
       <p class="eyebrow">{eyebrow}</p>
-      <h1 id="_top" data-page-title set:html={title} />
+      <h1 id="_top" data-page-title>
+        {/* Nₑ is what NeCast estimates, so the name carries it in the accent colour */}
+        {title === 'NeCast' ? <><span class="ne">Ne</span>Cast</> : <Fragment set:html={title} />}
+      </h1>
       {tagline && <div class="tagline" set:html={tagline} />}
     </div>
     {
@@ -53,11 +64,59 @@ const visualLabel = zh
 <style>
   @layer starlight.core {
     .hero {
+      --grid-line: color-mix(in srgb, var(--sl-color-gray-5) 55%, transparent);
+      --glow: color-mix(in srgb, var(--sl-color-accent) 12%, transparent);
+      position: relative;
+      isolation: isolate;
       display: grid;
       grid-template-columns: 100%;
       align-items: center;
       gap: 1.5rem;
       padding-bottom: 1rem;
+    }
+    /* graph paper behind the drawing, fading out towards the edges */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: -2.5rem 0 -1rem;
+      z-index: -1;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle at 50% 22%, var(--glow), transparent 40%),
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size:
+        100% 100%,
+        32px 32px,
+        32px 32px;
+      mask-image: radial-gradient(ellipse 75% 45% at 50% 22%, #000 25%, transparent 75%);
+    }
+    .ne {
+      color: var(--sl-color-accent);
+    }
+    .caption {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem 0.5rem;
+      margin-top: 0.75rem;
+      font-size: var(--sl-text-xs);
+      color: var(--sl-color-gray-3);
+      text-decoration: none;
+    }
+    .caption code {
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      background: var(--sl-color-accent-low);
+      color: var(--sl-color-accent-high);
+      font-family: var(--__sl-font-mono);
+      font-size: inherit;
+    }
+    .caption:hover span {
+      color: var(--sl-color-text-accent);
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
     }
     .visual {
       width: min(100%, 32rem);
@@ -109,6 +168,14 @@ const visualLabel = zh
         grid-template-columns: 5fr 6fr;
         gap: 4%;
         padding-block: clamp(2.5rem, calc(1rem + 8vmin), 7rem);
+      }
+      .hero::before {
+        inset: 0;
+        background-image:
+          radial-gradient(circle at 74% 50%, var(--glow), transparent 32%),
+          linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+          linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+        mask-image: radial-gradient(ellipse 45% 60% at 74% 50%, #000 30%, transparent 78%);
       }
       .visual {
         order: 2;
