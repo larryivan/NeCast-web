@@ -105,3 +105,41 @@
     text-align: inherit;
   }
 }
+
+/* Headings break into balanced lines; paragraphs avoid a lone word on their last line. */
+.sl-markdown-content :is(h1, h2, h3, h4),
+h1#_top {
+  text-wrap: balance;
+}
+.sl-markdown-content :is(p, li) {
+  text-wrap: pretty;
+}
+
+/* Tables in the pages: a tinted header row, light rules and aligned digits. Starlight keeps
+   tables display: block so that wide ones scroll on their own, so the tint goes on the header
+   cells, which always span exactly the table's columns. */
+.sl-markdown-content table:not(:where(.not-content *)) {
+  font-variant-numeric: tabular-nums;
+}
+.sl-markdown-content :is(th, td):not(:where(.not-content *)) {
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid var(--sl-color-hairline-light);
+}
+.sl-markdown-content th:not(:where(.not-content *)) {
+  border-bottom: 0;
+  background: color-mix(in srgb, var(--sl-color-gray-6) 60%, var(--sl-color-bg));
+  font-size: var(--sl-text-sm);
+  /* header labels are short; Chinese ones would otherwise break one character per line */
+  white-space: nowrap;
+}
+.sl-markdown-content th:first-child:not(:where(.not-content *)) {
+  border-start-start-radius: 0.5rem;
+  border-end-start-radius: 0.5rem;
+}
+.sl-markdown-content th:last-child:not(:where(.not-content *)) {
+  border-start-end-radius: 0.5rem;
+  border-end-end-radius: 0.5rem;
+}
+.sl-markdown-content tr:last-child > td:not(:where(.not-content *)) {
+  border-bottom: 0;
+}
