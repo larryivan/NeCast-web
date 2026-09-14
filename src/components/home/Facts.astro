@@ -18,9 +18,12 @@ const { items } = Astro.props;
 </div>
 
 <style>
+  /* two by two on phones and tablets, one row from 50rem; the 1px gaps draw the dividers */
   .facts {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--sl-color-hairline-light);
     border-block: 1px solid var(--sl-color-hairline-light);
     margin-block: 0.5rem 2.5rem;
   }
@@ -28,13 +31,11 @@ const { items } = Astro.props;
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
-    padding: 1.1rem 1.25rem;
-  }
-  .fact + .fact {
-    border-inline-start: 1px solid var(--sl-color-hairline-light);
+    padding: 1rem 0.9rem;
+    background: var(--sl-color-bg);
   }
   .value {
-    font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.2rem);
+    font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.2rem);
     font-weight: 650;
     letter-spacing: -0.02em;
     line-height: 1.1;
@@ -46,10 +47,12 @@ const { items } = Astro.props;
     line-height: 1.45;
     color: var(--sl-color-gray-3);
   }
-  @media (max-width: 40rem) {
-    .fact + .fact {
-      border-inline-start: 0;
-      border-block-start: 1px solid var(--sl-color-hairline-light);
+  @media (min-width: 50rem) {
+    .facts {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .fact {
+      padding: 1.1rem 1.25rem;
     }
   }
 </style>

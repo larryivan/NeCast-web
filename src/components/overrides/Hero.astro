@@ -8,7 +8,7 @@ const { data } = Astro.locals.starlightRoute.entry;
 const lang = Astro.locals.starlightRoute.lang;
 const { title = data.title, tagline, actions = [] } = data.hero || {};
 const zh = lang?.toLowerCase().startsWith('zh');
-const eyebrow = zh ? '用模拟数据训练的神经网络 · 群体遗传学' : 'A neural network trained on simulations · population genetics';
+const eyebrow = zh ? '群体遗传学 · 深度学习' : 'Population genetics · deep learning';
 const visualLabel = zh
   ? '一个真实的训练窗口：32 个个体在 48 个变异位点上的基因型，经过五路输入，得到该窗口 64 个区间上的群体大小历史。'
   : 'A real training window: the genotypes of 32 individuals at 48 variant sites pass through five streams to the window’s size history on 64 intervals.';
@@ -27,12 +27,23 @@ const visualLabel = zh
     {
       actions.length > 0 && (
         <div class="sl-flex actions">
-          {actions.map(({ attrs: { class: className, ...attrs } = {}, icon, link: href, text, variant }) => (
+          {actions.slice(0, 1).map(({ attrs: { class: className, ...attrs } = {}, icon, link: href, text, variant }) => (
             <LinkButton {href} {variant} icon={icon?.name} class:list={[className]} {...attrs}>
               {text}
               {icon?.html && <Fragment set:html={icon.html} />}
             </LinkButton>
           ))}
+          {/* the secondary links wrap as one group, never one of them alone */}
+          {actions.length > 1 && (
+            <div class="sl-flex secondary">
+              {actions.slice(1).map(({ attrs: { class: className, ...attrs } = {}, icon, link: href, text, variant }) => (
+                <LinkButton {href} {variant} icon={icon?.name} class:list={[className]} {...attrs}>
+                  {text}
+                  {icon?.html && <Fragment set:html={icon.html} />}
+                </LinkButton>
+              ))}
+            </div>
+          )}
         </div>
       )
     }
@@ -86,9 +97,11 @@ const visualLabel = zh
       line-height: 1.5;
       color: var(--sl-color-gray-2);
     }
-    .actions {
+    .actions,
+    .secondary {
       gap: 1rem 2rem;
       flex-wrap: wrap;
+      align-items: center;
       justify-content: center;
     }
     @media (min-width: 50rem) {
@@ -107,7 +120,8 @@ const visualLabel = zh
       .copy {
         align-items: flex-start;
       }
-      .actions {
+      .actions,
+      .secondary {
         justify-content: flex-start;
       }
     }
