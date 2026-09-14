@@ -4,15 +4,11 @@ description: Hugging Face 上的四个 NeCast 仓库，以及怎样下载全部�
 ---
 
 import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+import Repos from '../../../../components/Repos.astro';
 
 NeCast 论文用到的所有数据都以 CC BY 4.0 协议发布在 Hugging Face。每个仓库都有一份说明卡片，逐一说明每个文件；还有一个 `SHA256SUMS` 文件，给出每个文件的校验值。
 
-| 仓库 | 内容 | 大小 |
-|---|---|---|
-| [`Larrivhan/NeCast-simulations`](https://huggingface.co/datasets/Larrivhan/NeCast-simulations) | 109,248 个模拟窗口及其真实历史、网络的输入文件和模拟器（[详情](simulations/)，[浏览器](explorer/)） | 647 GB |
-| [`Larrivhan/NeCast-benchmark`](https://huggingface.co/datasets/Larrivhan/NeCast-benchmark) | 三种设置下的 33 条历史：窗口、给每个方法的输入、全部估计和评分（[详情](benchmark/)） | 24 GB |
-| [`Larrivhan/NeCast-1000G`](https://huggingface.co/datasets/Larrivhan/NeCast-1000G) | 千人基因组计划 25 个人群在 51 个窗口上的分析，以及低深度对比（[详情](1000g/)） | 196 GB |
-| [`Larrivhan/NeCast`](https://huggingface.co/Larrivhan/NeCast) | 训练好的网络、训练记录和对照实验的网络（[详情](../model/)） | 0.8 GB |
+<Repos lang="zh" />
 
 ## 需要下载哪些文件？
 

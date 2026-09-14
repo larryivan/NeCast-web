@@ -1,0 +1,202 @@
+---
+// The four Hugging Face repositories as cards: what each holds and its size. The whole card
+// opens the repository's page on this site; the footer links to the explorer (for the corpus)
+// and to the repository on Hugging Face.
+import { Icon } from '@astrojs/starlight/components';
+
+interface Props {
+  lang?: 'en' | 'zh';
+}
+const { lang = 'en' } = Astro.props;
+const zh = lang === 'zh';
+// links work from any page: the site's base, then the language prefix
+const root = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}${zh ? 'zh-cn/' : ''}`;
+const hf = 'https://huggingface.co/';
+
+const T = zh
+  ? { dataset: '数据集', model: '模型', explorer: '语料浏览器' }
+  : { dataset: 'Dataset', model: 'Model', explorer: 'Explorer' };
+
+const repos = [
+  {
+    kind: T.dataset,
+    title: zh ? '模拟语料' : 'Simulated corpus',
+    id: 'Larrivhan/NeCast-simulations',
+    href: `${hf}datasets/Larrivhan/NeCast-simulations`,
+    text: zh
+      ? '109,248 个 30 Mb 窗口及其真实历史、网络的输入文件和模拟器。'
+      : "109,248 windows of 30 Mb with their true histories, the network's input files and the simulator.",
+    size: '647 GB',
+    details: `${root}data/simulations/`,
+    explorer: `${root}data/explorer/`,
+  },
+  {
+    kind: T.dataset,
+    title: zh ? '基准' : 'Benchmark',
+    id: 'Larrivhan/NeCast-benchmark',
+    href: `${hf}datasets/Larrivhan/NeCast-benchmark`,
+    text: zh
+      ? '三种设置下的 33 条历史：窗口、给每个方法的输入、全部估计和评分。'
+      : '33 histories in three settings: the windows, the inputs given to each method, every estimate and the scores.',
+    size: '24 GB',
+    details: `${root}data/benchmark/`,
+  },
+  {
+    kind: T.dataset,
+    title: zh ? '千人基因组分析' : '1000 Genomes analyses',
+    id: 'Larrivhan/NeCast-1000G',
+    href: `${hf}datasets/Larrivhan/NeCast-1000G`,
+    text: zh
+      ? '25 个人群、51 个窗口、四种图谱输入，以及低深度对比。'
+      : '25 populations, 51 windows, four map inputs, and the low-coverage comparison.',
+    size: '196 GB',
+    details: `${root}data/1000g/`,
+  },
+  {
+    kind: T.model,
+    title: zh ? '训练好的网络' : 'Trained network',
+    id: 'Larrivhan/NeCast',
+    href: `${hf}Larrivhan/NeCast`,
+    text: zh ? '权重、训练记录和对照实验的网络。' : 'Weights, training record and the networks of the comparisons.',
+    size: '0.8 GB',
+    details: `${root}model/`,
+  },
+];
+---
+
+<div class="repos not-content">
+  {
+    repos.map((r) => (
+      <article class="repo">
+        <div class="meta">
+          <span class="kind">{r.kind}</span>
+          <span class="size">{r.size}</span>
+        </div>
+        <h3>
+          <a href={r.details}>{r.title}</a>
+        </h3>
+        <code class="id">{r.id}</code>
+        <p>{r.text}</p>
+        <div class="links">
+          {r.explorer && (
+            <a href={r.explorer}>
+              {T.explorer}
+              <Icon name="right-arrow" size="0.95em" />
+            </a>
+          )}
+          <a href={r.href} target="_blank" rel="noreferrer">
+            Hugging Face
+            <Icon name="external" size="0.95em" />
+          </a>
+        </div>
+      </article>
+    ))
+  }
+</div>
+
+<style>
+  .repos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+    gap: 1rem;
+    margin-block: 1.25rem 2rem;
+  }
+  .repo {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding: 1.15rem 1.3rem 1.05rem;
+    border: 1px solid var(--sl-color-hairline-light);
+    border-radius: 0.8rem;
+    background: color-mix(in srgb, var(--sl-color-gray-6) 22%, var(--sl-color-bg));
+    transition: border-color 0.15s ease;
+  }
+  .repo:hover {
+    border-color: color-mix(in srgb, var(--sl-color-accent) 45%, var(--sl-color-hairline-light));
+  }
+  .meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .kind {
+    font-size: var(--sl-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--sl-color-accent);
+  }
+  .size {
+    padding: 0.1rem 0.55rem;
+    border-radius: 999px;
+    background: var(--sl-color-accent-low);
+    color: var(--sl-color-accent-high);
+    font-size: var(--sl-text-xs);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  h3 {
+    margin: 0.15rem 0 0;
+    font-size: var(--sl-text-lg);
+    line-height: 1.3;
+  }
+  h3 a {
+    color: var(--sl-color-white);
+    text-decoration: none;
+  }
+  /* the title's link covers the card; the footer links sit above it */
+  h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+  .repo:hover h3 a {
+    color: var(--sl-color-accent);
+  }
+  h3 a:focus-visible {
+    outline: none;
+  }
+  .repo:has(h3 a:focus-visible) {
+    outline: 2px solid var(--sl-color-accent);
+    outline-offset: 2px;
+  }
+  .id {
+    font-family: var(--__sl-font-mono);
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+    overflow-wrap: anywhere;
+  }
+  p {
+    flex-grow: 1;
+    margin: 0.2rem 0 0.35rem;
+    font-size: var(--sl-text-sm);
+    line-height: 1.55;
+    color: var(--sl-color-gray-2);
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.25rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--sl-color-hairline-light);
+    font-size: var(--sl-text-sm);
+    font-weight: 600;
+  }
+  .links a {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--sl-color-text-accent);
+    text-decoration: none;
+  }
+  .links a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+</style>

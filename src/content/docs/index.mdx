@@ -17,8 +17,8 @@ hero:
       variant: minimal
 ---
 
-import { CardGrid, LinkCard } from '@astrojs/starlight/components';
 import Facts from '../../components/home/Facts.astro';
+import Repos from '../../components/Repos.astro';
 import Flow from '../../components/home/Flow.astro';
 import Status from '../../components/home/Status.astro';
 import Figure from '../../components/Figure.astro';
@@ -64,28 +64,7 @@ import windowFigure from '../../assets/figures/simulations_window.png';
 
 ## Data and network
 
-<CardGrid>
-  <LinkCard
-    title="Simulated corpus"
-    description="109,248 windows of 30 Mb with their true histories, the network's input files and the simulator. 647 GB."
-    href="data/simulations/"
-  />
-  <LinkCard
-    title="Benchmark"
-    description="33 histories in three settings: the windows, the inputs given to each method, every estimate and the scores. 24 GB."
-    href="data/benchmark/"
-  />
-  <LinkCard
-    title="1000 Genomes analyses"
-    description="25 populations, 51 windows, four map inputs, and the low-coverage comparison. 196 GB."
-    href="data/1000g/"
-  />
-  <LinkCard
-    title="Trained network"
-    description="Weights, training record and the networks of the comparisons. 0.8 GB."
-    href="model/"
-  />
-</CardGrid>
+<Repos lang="en" />
 
 ## Status
 

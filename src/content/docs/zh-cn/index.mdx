@@ -17,8 +17,8 @@ hero:
       variant: minimal
 ---
 
-import { CardGrid, LinkCard } from '@astrojs/starlight/components';
 import Facts from '../../../components/home/Facts.astro';
+import Repos from '../../../components/Repos.astro';
 import Flow from '../../../components/home/Flow.astro';
 import Status from '../../../components/home/Status.astro';
 import Figure from '../../../components/Figure.astro';
@@ -61,12 +61,7 @@ import windowFigure from '../../../assets/figures/simulations_window_zh.png';
 
 ## 数据与网络
 
-<CardGrid>
-  <LinkCard title="模拟语料" description="109,248 个 30 Mb 窗口及其真实历史、网络的输入文件和模拟器。647 GB。" href="data/simulations/" />
-  <LinkCard title="基准" description="三种设置下的 33 条历史：窗口、给每个方法的输入、全部估计和评分。24 GB。" href="data/benchmark/" />
-  <LinkCard title="千人基因组分析" description="25 个人群、51 个窗口、四种图谱输入，以及低深度对比。196 GB。" href="data/1000g/" />
-  <LinkCard title="训练好的网络" description="权重、训练记录和对照实验的网络。0.8 GB。" href="model/" />
-</CardGrid>
+<Repos lang="zh" />
 
 ## 进展
 

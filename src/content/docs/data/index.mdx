@@ -4,16 +4,12 @@ description: The four NeCast repositories on Hugging Face, and how to download a
 ---
 
 import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+import Repos from '../../../components/Repos.astro';
 
 Everything behind the NeCast paper is on Hugging Face under CC BY 4.0. Each repository has a card
 that describes every file, and a `SHA256SUMS` file with a checksum for every file.
 
-| repository | contents | size |
-|---|---|---|
-| [`Larrivhan/NeCast-simulations`](https://huggingface.co/datasets/Larrivhan/NeCast-simulations) | 109,248 simulated windows with their true histories, the network's input files and the simulator ([details](simulations/), [explorer](explorer/)) | 647 GB |
-| [`Larrivhan/NeCast-benchmark`](https://huggingface.co/datasets/Larrivhan/NeCast-benchmark) | 33 histories in three settings: windows, the inputs given to each method, every estimate and the scores ([details](benchmark/)) | 24 GB |
-| [`Larrivhan/NeCast-1000G`](https://huggingface.co/datasets/Larrivhan/NeCast-1000G) | 25 populations of the 1000 Genomes Project on 51 windows, and the low-coverage comparison ([details](1000g/)) | 196 GB |
-| [`Larrivhan/NeCast`](https://huggingface.co/Larrivhan/NeCast) | the trained network, its training record and the networks of the comparisons ([details](../model/)) | 0.8 GB |
+<Repos lang="en" />
 
 ## Which files do I need?
 
