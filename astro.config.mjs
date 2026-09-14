@@ -18,7 +18,10 @@ export default defineConfig({
       favicon: '/favicon.svg',
       logo: { src: './src/assets/logo.svg', alt: 'NeCast' },
       // the home-page hero draws a real training window instead of an image
-      components: { Hero: './src/components/overrides/Hero.astro' },
+      components: {
+        Hero: './src/components/overrides/Hero.astro',
+        Footer: './src/components/overrides/Footer.astro',
+      },
       defaultLocale: 'root',
       locales: {
         root: { label: 'English', lang: 'en' },
