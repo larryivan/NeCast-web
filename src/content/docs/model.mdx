@@ -29,8 +29,9 @@ The weights are on Hugging Face as [`Larrivhan/NeCast`](https://huggingface.co/L
 | `ablations/` | 5 networks trained on the same 12,500 windows with different inputs |
 
 `final/checkpoint.pt` is a plain PyTorch file. `torch.load(path, map_location="cpu",
-weights_only=True)` returns a dictionary whose `state_dict` holds the weights. The code that builds
-the inputs and runs the network is being prepared for release.
+weights_only=True)` returns a dictionary whose `state_dict` holds the weights. NeCast's
+command-line tool, which builds the inputs and runs the network, is being prepared; its
+documentation will be on this site.
 
 ## Training
 

@@ -25,7 +25,7 @@ import modelTrainingZhFigure from '../../../assets/figures/model_training_zh.png
 | `training_contrasts/` | 用 8,000 或 88,000 个窗口训练的 7 个网络 |
 | `ablations/` | 用同样 12,500 个窗口、不同输入训练的 5 个网络 |
 
-`final/checkpoint.pt` 是普通的 PyTorch 文件：`torch.load(path, map_location="cpu", weights_only=True)` 返回一个字典，其中 `state_dict` 是权重。构建输入和运行网络的代码正在整理，随后发布。
+`final/checkpoint.pt` 是普通的 PyTorch 文件：`torch.load(path, map_location="cpu", weights_only=True)` 返回一个字典，其中 `state_dict` 是权重。NeCast 的命令行工具（构建输入并运行网络）正在准备，使用文档将放在本站。
 
 ## 训练
 
