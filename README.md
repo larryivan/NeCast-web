@@ -52,6 +52,11 @@ The link-preview image reuses the hero drawing of the built home page, and needs
 npm run build && node scripts/build_social_card.mjs
 ```
 
+## Authors
+
+Yufan Han (larryivanhan@gmail.com) and Ke Wang, [Ke's Lab](https://www.wangke-evoanthropology.site/),
+School of Life Sciences, Fudan University.
+
 ## Licence
 
 Code: MIT. Text and figures: CC BY 4.0.

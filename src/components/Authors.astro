@@ -1,0 +1,207 @@
+---
+// The authors of NeCast and the lab it comes from. Titles and the lab's name follow the lab's
+// own website (wangke-evoanthropology.site).
+import { Icon } from '@astrojs/starlight/components';
+
+interface Props {
+  lang?: 'en' | 'zh';
+}
+const { lang = 'en' } = Astro.props;
+const zh = lang === 'zh';
+const lab = `https://www.wangke-evoanthropology.site/${zh ? 'zh/' : ''}`;
+
+type Link = { icon: 'email' | 'github' | 'external'; text: string; href: string };
+const authors: { name: string; other: string; monogram: string; role: string; lines: string[]; links: Link[] }[] = [
+  {
+    name: zh ? '韩宇帆' : 'Yufan Han',
+    other: zh ? 'Yufan Han' : '韩宇帆',
+    monogram: zh ? '韩' : 'YH',
+    role: zh ? '开发者' : 'Developer',
+    lines: zh ? ['王轲课题组', '复旦大学生命科学学院'] : ['Ke’s Lab', 'School of Life Sciences, Fudan University'],
+    links: [
+      { icon: 'email', text: 'larryivanhan@gmail.com', href: 'mailto:larryivanhan@gmail.com' },
+      { icon: 'github', text: 'larryivan', href: 'https://github.com/larryivan' },
+      { icon: 'external', text: 'Hugging Face', href: 'https://huggingface.co/Larrivhan' },
+    ],
+  },
+  {
+    name: zh ? '王轲' : 'Ke Wang',
+    other: zh ? 'Ke Wang' : '王轲',
+    monogram: zh ? '王' : 'KW',
+    role: zh ? '课题组负责人' : 'Principal investigator',
+    lines: zh
+      ? ['复旦大学生命科学学院', '人类学与人类遗传学系', '青年研究员']
+      : ['Department of Anthropology and Human Genetics', 'School of Life Sciences, Fudan University'],
+    links: [
+      { icon: 'external', text: zh ? '课题组官网' : 'Lab website', href: lab },
+      { icon: 'email', text: zh ? '联系课题组' : 'Contact the lab', href: `${lab}Contact.html` },
+    ],
+  },
+];
+---
+
+<div class="authors not-content">
+  <div class="people">
+    {
+      authors.map((a) => (
+        <article class="person">
+          <div class="monogram" aria-hidden="true">
+            {a.monogram}
+          </div>
+          <div class="body">
+            <p class="role">{a.role}</p>
+            <h3>
+              {a.name} <span class="other">{a.other}</span>
+            </h3>
+            {a.lines.map((line) => (
+              <p class="line">{line}</p>
+            ))}
+            <ul class="links">
+              {a.links.map((l) => (
+                <li>
+                  <a href={l.href} {...(l.href.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {})}>
+                    <Icon name={l.icon} size="1em" />
+                    {l.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+  <div class="lab">
+    <div>
+      <p class="lab-name">{zh ? '王轲课题组' : 'Ke’s Lab'}</p>
+      <p class="lab-line">{zh ? '古DNA与人类群体历史 · 复旦大学' : 'Ancient DNA and human population history · Fudan University'}</p>
+    </div>
+    <a class="lab-link" href={lab} target="_blank" rel="noreferrer">
+      {zh ? '访问课题组官网' : 'Visit the lab website'}
+      <Icon name="external" size="1em" />
+    </a>
+  </div>
+</div>
+
+<style>
+  .authors {
+    display: grid;
+    gap: 1rem;
+    margin-block: 1.25rem 2.5rem;
+  }
+  .people {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: 1rem;
+  }
+  .person {
+    display: flex;
+    gap: 1rem;
+    padding: 1.2rem 1.3rem;
+    border: 1px solid var(--sl-color-hairline-light);
+    border-radius: 0.8rem;
+    background: color-mix(in srgb, var(--sl-color-gray-6) 22%, var(--sl-color-bg));
+  }
+  .monogram {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 999px;
+    background: var(--sl-color-accent-low);
+    color: var(--sl-color-accent-high);
+    font-size: var(--sl-text-base);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+  .role {
+    margin: 0;
+    font-size: var(--sl-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--sl-color-accent);
+  }
+  h3 {
+    margin: 0.1rem 0 0.25rem;
+    font-size: var(--sl-text-lg);
+    line-height: 1.3;
+    color: var(--sl-color-white);
+  }
+  .other {
+    margin-inline-start: 0.35rem;
+    font-size: var(--sl-text-sm);
+    font-weight: 400;
+    color: var(--sl-color-gray-3);
+  }
+  .line {
+    margin: 0;
+    font-size: var(--sl-text-sm);
+    line-height: 1.5;
+    color: var(--sl-color-gray-2);
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.1rem;
+    margin: 0.7rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--sl-text-sm);
+  }
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--sl-color-text-accent);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .links a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .lab {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.9rem 1.5rem;
+    padding: 1.1rem 1.3rem;
+    border-radius: 0.8rem;
+    background: color-mix(in srgb, var(--sl-color-accent) 8%, var(--sl-color-bg));
+    border: 1px solid color-mix(in srgb, var(--sl-color-accent) 25%, var(--sl-color-bg));
+  }
+  .lab-name {
+    margin: 0;
+    font-size: var(--sl-text-lg);
+    font-weight: 650;
+    color: var(--sl-color-white);
+  }
+  .lab-line {
+    margin: 0.15rem 0 0;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-2);
+  }
+  .lab-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--sl-text-sm);
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--sl-color-text-accent);
+    text-decoration: none;
+  }
+  .lab-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+</style>
