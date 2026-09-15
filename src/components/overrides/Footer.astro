@@ -1,6 +1,6 @@
 ---
 // Starlight's footer (pagination on the documentation pages), followed by the site's own
-// line: the name, the licences, and where the project lives.
+// line: the name, the lab, the licences, and where the project lives.
 import Default from '@astrojs/starlight/components/Footer.astro';
 
 const lang = Astro.locals.starlightRoute.lang;
@@ -8,6 +8,7 @@ const lang = Astro.locals.starlightRoute.lang;
 const zh = lang?.toLowerCase().startsWith('zh') || Astro.url.pathname.includes('/zh-cn/');
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const home = `${base}${zh ? 'zh-cn/' : ''}`;
+const lab = `https://www.wangke-evoanthropology.site/${zh ? 'zh/' : ''}`;
 const licence = zh ? '数据和权重以 CC BY 4.0 发布，代码以 MIT 发布。' : 'Data and weights under CC BY 4.0, code under MIT.';
 ---
 
@@ -17,8 +18,11 @@ const licence = zh ? '数据和权重以 CC BY 4.0 发布，代码以 MIT 发布
     <img src={`${base}favicon.svg`} alt="" width="20" height="20" />
     NeCast
   </a>
-  <p>{licence}</p>
+  <p>
+    <a href={lab} target="_blank" rel="noreferrer">{zh ? '复旦大学王轲课题组' : 'Ke’s Lab, Fudan University'}</a>{zh ? '。' : '. '}{licence}
+  </p>
   <nav aria-label={zh ? '项目链接' : 'Project links'}>
+    <a href={`${home}about/`}>{zh ? '作者' : 'Authors'}</a>
     <a href="https://huggingface.co/Larrivhan">Hugging Face</a>
     <a href="https://github.com/larryivan/NeCast">GitHub</a>
   </nav>
@@ -50,6 +54,15 @@ const licence = zh ? '数据和权重以 CC BY 4.0 发布，代码以 MIT 发布
   }
   p {
     margin: 0;
+  }
+  p a {
+    color: var(--sl-color-gray-2);
+    text-decoration: none;
+  }
+  p a:hover {
+    color: var(--sl-color-text-accent);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
   nav {
     display: flex;
