@@ -38,6 +38,7 @@ const html = `<!doctype html>
   .en { margin: 28px 0 0; font-size: 34px; line-height: 1.3; font-weight: 500; color: #3f3f46; }
   .zh { margin: 14px 0 0; font-size: 27px; line-height: 1.4; color: #71717a; }
   .url { position: absolute; left: 72px; bottom: 48px; margin: 0; font: 500 21px ui-monospace, 'SF Mono', Menlo, monospace; color: #71717a; }
+  .lab { position: absolute; right: 72px; bottom: 48px; margin: 0; font-size: 21px; font-weight: 500; color: #71717a; }
   .hero-visual { display: block; width: 100%; height: auto; overflow: visible; color: #71717a; }
   .g0 { fill: #e4e4e7; } .g1 { fill: #94aad0; } .g2 { fill: #1f4e9e; } .gm { fill: #e0a33b; }
   .streams path { fill: none; stroke: #1f4e9e; stroke-width: 1.4; opacity: 0.55; }
@@ -56,6 +57,7 @@ const html = `<!doctype html>
   </div>
   <div class="drawing">${drawing}</div>
   <p class="url">larryivan.github.io/NeCast-web</p>
+  <p class="lab">Ke’s Lab · Fudan University</p>
 </div></body></html>`;
 
 const work = mkdtempSync(join(tmpdir(), 'necast-card-'));
