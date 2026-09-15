@@ -16,6 +16,17 @@ export default defineConfig({
       description:
         'NeCast estimates the size history of a population from 32 unphased genomes and the recombination and mutation maps of their window.',
       favicon: '/favicon.svg',
+      // the link-preview image (scripts/build_social_card.mjs draws it); Starlight adds the rest
+      head: [
+        { tag: 'meta', attrs: { property: 'og:image', content: 'https://larryivan.github.io/NeCast-web/og.png' } },
+        { tag: 'meta', attrs: { property: 'og:image:width', content: '1200' } },
+        { tag: 'meta', attrs: { property: 'og:image:height', content: '630' } },
+        {
+          tag: 'meta',
+          attrs: { property: 'og:image:alt', content: 'NeCast: population size histories from genotypes and genetic maps' },
+        },
+        { tag: 'meta', attrs: { name: 'twitter:image', content: 'https://larryivan.github.io/NeCast-web/og.png' } },
+      ],
       logo: { src: './src/assets/logo.svg', alt: 'NeCast' },
       // the home-page hero draws a real training window instead of an image
       components: {

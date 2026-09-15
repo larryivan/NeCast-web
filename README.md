@@ -30,6 +30,7 @@ The data themselves are on Hugging Face (`Larrivhan/NeCast-simulations`, `Larriv
 | `src/assets/figures/` | the figures of the pages (drawn in R with the paper's style) |
 | `public/data/explorer/` | the explorer's index: `windows.parquet`, the labels, `summary.json` |
 | `scripts/build_explorer_data.py` | builds `public/data/explorer/` from the released corpus |
+| `scripts/build_social_card.mjs` | draws `public/og.png`, the image that link previews show |
 
 ## Working on it
 
@@ -43,6 +44,12 @@ The explorer's index is rebuilt from a copy of `NeCast-simulations` (the index a
 
 ```bash
 python scripts/build_explorer_data.py --corpus <NeCast-simulations> --out public/data/explorer
+```
+
+The link-preview image reuses the hero drawing of the built home page, and needs Chrome:
+
+```bash
+npm run build && node scripts/build_social_card.mjs
 ```
 
 ## Licence
