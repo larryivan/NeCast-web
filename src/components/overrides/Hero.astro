@@ -7,7 +7,11 @@ import HeroVisual from '../home/HeroVisual.astro';
 const { data } = Astro.locals.starlightRoute.entry;
 const lang = Astro.locals.starlightRoute.lang;
 const { title = data.title, tagline, actions = [] } = data.hero || {};
-const zh = lang?.toLowerCase().startsWith('zh');
+// the 404 route keeps the root language, so the address decides there
+const zh = lang?.toLowerCase().startsWith('zh') || Astro.url.pathname.includes('/zh-cn/');
+// only the home page (hero title NeCast) gets the drawing; other heroes, such as the 404 page,
+// are a single centred column
+const home = title === 'NeCast';
 const eyebrow = zh ? '群体遗传学 · 深度学习' : 'Population genetics · deep learning';
 const visualLabel = zh
   ? '一个真实的训练窗口：32 个个体在 48 个变异位点上的基因型，经过五路输入，得到该窗口 64 个区间上的群体大小历史。'
@@ -15,26 +19,41 @@ const visualLabel = zh
 // the drawing is window 16 of the corpus; the caption opens it in the explorer
 const explorerHref = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}${zh ? 'zh-cn/' : ''}data/explorer/?w=16`;
 const caption = zh ? '在语料浏览器中打开这个窗口' : 'Open this window in the explorer';
+// a hero without buttons (the 404 page) offers the way home that its text mentions
+const homeHref = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}${zh ? 'zh-cn/' : ''}`;
 ---
 
-<div class="hero">
-  <div class="visual">
-    <HeroVisual label={visualLabel} />
-    <a class="caption" href={explorerHref}>
-      <code>sim_00000016</code>
-      <span>{caption}</span>
-      <Icon name="right-arrow" size="1em" />
-    </a>
-  </div>
+<div class:list={['hero', { plain: !home }]}>
+  {
+    home && (
+      <div class="visual">
+        <HeroVisual label={visualLabel} />
+        <a class="caption" href={explorerHref}>
+          <code>sim_00000016</code>
+          <span>{caption}</span>
+          <Icon name="right-arrow" size="1em" />
+        </a>
+      </div>
+    )
+  }
   <div class="sl-flex stack">
     <div class="sl-flex copy">
-      <p class="eyebrow">{eyebrow}</p>
+      {home && <p class="eyebrow">{eyebrow}</p>}
       <h1 id="_top" data-page-title>
         {/* Nₑ is what NeCast estimates, so the name carries it in the accent colour */}
-        {title === 'NeCast' ? <><span class="ne">Ne</span>Cast</> : <Fragment set:html={title} />}
+        {home ? <><span class="ne">Ne</span>Cast</> : <Fragment set:html={title} />}
       </h1>
       {tagline && <div class="tagline" set:html={tagline} />}
     </div>
+    {
+      actions.length === 0 && !home && (
+        <div class="sl-flex actions">
+          <LinkButton href={homeHref} icon="right-arrow">
+            {zh ? '回到首页' : 'Go to the home page'}
+          </LinkButton>
+        </div>
+      )
+    }
     {
       actions.length > 0 && (
         <div class="sl-flex actions">
@@ -191,6 +210,28 @@ const caption = zh ? '在语料浏览器中打开这个窗口' : 'Open this wind
       .secondary {
         justify-content: flex-start;
       }
+    }
+  }
+  @layer starlight.core {
+    .hero.plain {
+      grid-template-columns: 100%;
+    }
+    .hero.plain::before {
+      inset: 0;
+      background-image:
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse 45% 70% at 50% 50%, #000 20%, transparent 75%);
+    }
+    .hero.plain .stack {
+      text-align: center;
+    }
+    .hero.plain .copy {
+      align-items: center;
+    }
+    .hero.plain :is(.actions, .secondary) {
+      justify-content: center;
     }
   }
 </style>

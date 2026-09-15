@@ -4,7 +4,8 @@
 import Default from '@astrojs/starlight/components/Footer.astro';
 
 const lang = Astro.locals.starlightRoute.lang;
-const zh = lang?.toLowerCase().startsWith('zh');
+// the 404 route keeps the root language, so the address decides there
+const zh = lang?.toLowerCase().startsWith('zh') || Astro.url.pathname.includes('/zh-cn/');
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const home = `${base}${zh ? 'zh-cn/' : ''}`;
 const licence = zh ? '数据和权重以 CC BY 4.0 发布，代码以 MIT 发布。' : 'Data and weights under CC BY 4.0, code under MIT.';
