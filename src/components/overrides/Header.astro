@@ -1,0 +1,133 @@
+---
+// Starlight's header bar, with a row of the site's sections below it. The home page and the
+// explorer have no sidebar, and phones hide the sidebar, so this row is the one menu that every
+// page shows. The tab of the current section is marked.
+import Default from '@astrojs/starlight/components/Header.astro';
+
+const lang = Astro.locals.starlightRoute.lang;
+// the 404 route keeps the root language, so the address decides there
+const zh = lang?.toLowerCase().startsWith('zh') || Astro.url.pathname.includes('/zh-cn/');
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const root = `${base}${zh ? 'zh-cn/' : ''}`;
+const path = Astro.url.pathname.startsWith(root) ? Astro.url.pathname.slice(root.length) : null;
+
+const section =
+  path === ''
+    ? 'home'
+    : path === null
+      ? null
+      : path.startsWith('data/explorer')
+        ? 'explorer'
+        : path.startsWith('data')
+          ? 'data'
+          : /^(method|model)/.test(path)
+            ? 'method'
+            : path.startsWith('about')
+              ? 'authors'
+              : null;
+
+const tabs = [
+  { key: 'home', label: zh ? '首页' : 'Home', href: root },
+  { key: 'method', label: zh ? '原理' : 'Method', href: `${root}method/` },
+  { key: 'data', label: zh ? '数据' : 'Data', href: `${root}data/` },
+  { key: 'explorer', label: zh ? '语料浏览器' : 'Explorer', href: `${root}data/explorer/` },
+  { key: 'authors', label: zh ? '作者' : 'Authors', href: `${root}about/` },
+];
+
+// phones show no language menu on pages without a sidebar, so the row links the other language
+const other = path !== null && !path.startsWith('404') ? `${base}${zh ? '' : 'zh-cn/'}${path}` : `${base}${zh ? '' : 'zh-cn/'}`;
+---
+
+<div class="necast-header">
+  <div class="bar"><Default /></div>
+  <nav class="tabs print:hidden" aria-label={zh ? '网站栏目' : 'Site sections'}>
+    <ul>
+      {
+        tabs.map((t) => (
+          <li>
+            <a href={t.href} aria-current={t.key === section ? 'page' : undefined}>
+              {t.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <a class="other-lang" href={other} lang={zh ? 'en' : 'zh-CN'} hreflang={zh ? 'en' : 'zh-CN'}>
+      {zh ? 'EN' : '中文'}
+    </a>
+  </nav>
+</div>
+
+<style>
+  .necast-header {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .bar {
+    flex: none;
+    height: calc(var(--necast-bar-height) - 2 * var(--sl-nav-pad-y));
+  }
+  .tabs {
+    flex: none;
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
+    height: var(--necast-tabs-height);
+    margin: var(--sl-nav-pad-y) calc(-1 * var(--sl-nav-pad-x)) calc(-1 * var(--sl-nav-pad-y));
+    padding-inline: var(--sl-nav-pad-x);
+    border-top: 1px solid var(--sl-color-hairline);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+  /* on phones Starlight pads the header's end for the menu button; the row runs under it */
+  :global([data-has-sidebar]) .tabs {
+    margin-inline-end: calc(-1 * (var(--sl-nav-gap) + var(--sl-nav-pad-x) + var(--sl-menu-button-size)));
+  }
+  ul {
+    display: flex;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  li {
+    display: flex;
+  }
+  .tabs a {
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid transparent;
+    font-size: var(--sl-text-sm);
+    font-weight: 500;
+    white-space: nowrap;
+    color: var(--sl-color-gray-2);
+    text-decoration: none;
+  }
+  .tabs a:hover {
+    color: var(--sl-color-white);
+  }
+  .tabs a[aria-current='page'] {
+    border-bottom-color: var(--sl-color-accent);
+    font-weight: 600;
+    color: var(--sl-color-text-accent);
+  }
+  .other-lang {
+    margin-inline-start: auto;
+  }
+  /* from 50rem the header bar has its own language menu, and the tabs get more room */
+  @media (min-width: 50rem) {
+    :global([data-has-sidebar]) .tabs {
+      margin-inline-end: calc(-1 * var(--sl-nav-pad-x));
+    }
+    ul {
+      gap: 1.6rem;
+    }
+    .other-lang {
+      display: none !important;
+    }
+  }
+</style>

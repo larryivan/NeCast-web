@@ -24,6 +24,27 @@
   --sl-color-accent-high: #12305f;
 }
 
+/* The header is Starlight's bar plus a row of the site's sections (overrides/Header.astro).
+   Starlight places the sidebar, the contents bar and the page below --sl-nav-height, so that
+   height covers both rows; the logo and the phone menu button keep the bar's own height. */
+:root {
+  --necast-bar-height: 3.5rem;
+  --necast-tabs-height: 2.5rem;
+  --sl-nav-height: calc(var(--necast-bar-height) + var(--necast-tabs-height));
+}
+@media (min-width: 50em) {
+  :root {
+    --necast-bar-height: 4rem;
+    --necast-tabs-height: 2.75rem;
+  }
+}
+.site-title img {
+  height: calc(var(--necast-bar-height) - 2 * var(--sl-nav-pad-y));
+}
+.sl-menu-button {
+  top: calc((var(--necast-bar-height) - var(--sl-menu-button-size)) / 2);
+}
+
 /* System fonts only: nothing is downloaded, which matters most for readers in mainland China. */
 :root[lang='zh-CN'] {
   --sl-font: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',

@@ -30,6 +30,7 @@ export default defineConfig({
       logo: { src: './src/assets/logo.svg', alt: 'NeCast' },
       // the home-page hero draws a real training window instead of an image
       components: {
+        Header: './src/components/overrides/Header.astro',
         Hero: './src/components/overrides/Hero.astro',
         Footer: './src/components/overrides/Footer.astro',
       },
@@ -45,7 +46,7 @@ export default defineConfig({
       sidebar: [
         {
           label: 'Method',
-          translations: { 'zh-CN': '方法' },
+          translations: { 'zh-CN': '原理' },
           items: [{ slug: 'method' }, { slug: 'model' }],
         },
         {
