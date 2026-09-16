@@ -164,3 +164,34 @@ h1#_top {
 .sl-markdown-content tr:last-child > td:not(:where(.not-content *)) {
   border-bottom: 0;
 }
+
+/* A translucent header: the page shows faintly through it as it scrolls by. */
+header.header {
+  background-color: color-mix(in srgb, var(--sl-color-bg-nav) 84%, transparent);
+  -webkit-backdrop-filter: saturate(1.4) blur(12px);
+  backdrop-filter: saturate(1.4) blur(12px);
+}
+
+/* The current page in the sidebar: a tint of the accent instead of a solid block. */
+.sidebar-content a[aria-current='page'],
+.sidebar-content a[aria-current='page']:hover,
+.sidebar-content a[aria-current='page']:focus {
+  background-color: var(--sl-color-accent-low);
+  color: var(--sl-color-text-accent);
+}
+
+/* Previous and next links: a light frame that takes the accent on hover. */
+.pagination-links a {
+  border-color: var(--sl-color-hairline-light);
+  border-radius: 0.8rem;
+  box-shadow: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.pagination-links a:hover {
+  border-color: color-mix(in srgb, var(--sl-color-accent) 50%, var(--sl-color-hairline-light));
+  background-color: color-mix(in srgb, var(--sl-color-accent) 4%, var(--sl-color-bg));
+}
+.pagination-links .link-title {
+  font-size: var(--sl-text-xl);
+  font-weight: 600;
+}
