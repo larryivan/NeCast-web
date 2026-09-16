@@ -32,6 +32,7 @@ export default defineConfig({
       components: {
         Header: './src/components/overrides/Header.astro',
         Hero: './src/components/overrides/Hero.astro',
+        PageTitle: './src/components/overrides/PageTitle.astro',
         Footer: './src/components/overrides/Footer.astro',
       },
       defaultLocale: 'root',

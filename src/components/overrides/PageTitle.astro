@@ -1,0 +1,49 @@
+---
+// The page title, with the sidebar group that holds the page above it and the page's one-line
+// summary (its description) below, so every page says where it sits and what it is for.
+const { entry, sidebar } = Astro.locals.starlightRoute;
+const { title, description } = entry.data;
+
+type Entry = { type: 'link'; isCurrent: boolean } | { type: 'group'; label: string; entries: Entry[] };
+const holds = (e: Entry): boolean => (e.type === 'link' ? e.isCurrent : e.entries.some(holds));
+const group = (sidebar as Entry[]).find((e) => e.type === 'group' && holds(e)) as { label: string } | undefined;
+---
+
+<div class="page-title">
+  {group && <p class="group">{group.label}</p>}
+  <h1 id="_top">{title}</h1>
+  {description && <p class="lead">{description}</p>}
+</div>
+
+<style>
+  @layer starlight.core {
+    .page-title {
+      margin-top: 1rem;
+    }
+    .group {
+      margin: 0 0 0.5rem;
+      font-size: var(--sl-text-xs);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sl-color-accent);
+    }
+    h1 {
+      margin: 0;
+      font-size: var(--sl-text-h1);
+      line-height: var(--sl-line-height-headings);
+      font-weight: 650;
+      letter-spacing: -0.02em;
+      color: var(--sl-color-white);
+      text-wrap: balance;
+    }
+    .lead {
+      max-width: 44rem;
+      margin: 0.8rem 0 0;
+      font-size: var(--sl-text-lg);
+      line-height: 1.55;
+      color: var(--sl-color-gray-2);
+      text-wrap: pretty;
+    }
+  }
+</style>
