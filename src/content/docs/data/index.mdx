@@ -15,12 +15,12 @@ that describes every file, and a `SHA256SUMS` file with a checksum for every fil
 
 | to… | download |
 |---|---|
-| train or test a method on the simulations | `NeCast-simulations`: windows picked in the [explorer](explorer/) or all of `windows/`, with `index/windows.parquet` and `splits/` |
-| reuse NeCast's inputs (summaries, PSMC+ posteriors) | `NeCast-simulations`: `features/` |
-| run a method on the benchmark | `NeCast-benchmark`: `method_inputs/` (the files each method read) and `histories/` (the truth) |
-| compare estimates with NeCast and the other methods | `NeCast-benchmark`: `estimates/` and `scores/` |
-| reproduce the 1000 Genomes curves | `NeCast-1000G`: `populations_25/results/` |
-| load the trained network | `NeCast`: `final/checkpoint.pt` |
+| train or test a method on the simulations | [`NeCast-simulations`](simulations/): windows picked in the [explorer](explorer/) or all of `windows/`, with `index/windows.parquet` and `splits/` |
+| reuse NeCast's inputs (summaries, PSMC+ posteriors) | [`NeCast-simulations`](simulations/): `features/` |
+| run a method on the benchmark | [`NeCast-benchmark`](benchmark/): `method_inputs/` (the files each method read) and `histories/` (the truth) |
+| compare estimates with NeCast and the other methods | [`NeCast-benchmark`](benchmark/): `estimates/` and `scores/` |
+| reproduce the 1000 Genomes curves | [`NeCast-1000G`](1000g/): `populations_25/results/` |
+| load the trained network | [`NeCast`](../model/): `final/checkpoint.pt` |
 
 ## Downloading
 

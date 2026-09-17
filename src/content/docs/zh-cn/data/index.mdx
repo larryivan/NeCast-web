@@ -14,12 +14,12 @@ NeCast 论文用到的所有数据都以 CC BY 4.0 协议发布在 Hugging Face�
 
 | 想要…… | 下载 |
 |---|---|
-| 在模拟数据上训练或测试一个方法 | `NeCast-simulations`：在[浏览器](explorer/)里选出的窗口或整个 `windows/`，加上 `index/windows.parquet` 和 `splits/` |
-| 复用 NeCast 的输入（汇总统计、PSMC+ 后验） | `NeCast-simulations`：`features/` |
-| 在基准上运行一个方法 | `NeCast-benchmark`：`method_inputs/`（每个方法读取的原始文件）和 `histories/`（真值） |
-| 把估计结果与 NeCast 和其他方法比较 | `NeCast-benchmark`：`estimates/` 和 `scores/` |
-| 复现千人基因组的曲线 | `NeCast-1000G`：`populations_25/results/` |
-| 加载训练好的网络 | `NeCast`：`final/checkpoint.pt` |
+| 在模拟数据上训练或测试一个方法 | [`NeCast-simulations`](simulations/)：在[浏览器](explorer/)里选出的窗口或整个 `windows/`，加上 `index/windows.parquet` 和 `splits/` |
+| 复用 NeCast 的输入（汇总统计、PSMC+ 后验） | [`NeCast-simulations`](simulations/)：`features/` |
+| 在基准上运行一个方法 | [`NeCast-benchmark`](benchmark/)：`method_inputs/`（每个方法读取的原始文件）和 `histories/`（真值） |
+| 把估计结果与 NeCast 和其他方法比较 | [`NeCast-benchmark`](benchmark/)：`estimates/` 和 `scores/` |
+| 复现千人基因组的曲线 | [`NeCast-1000G`](1000g/)：`populations_25/results/` |
+| 加载训练好的网络 | [`NeCast`](../model/)：`final/checkpoint.pt` |
 
 ## 下载
 
