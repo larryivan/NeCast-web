@@ -74,5 +74,23 @@ export default defineConfig({
     plugins: [tailwindcss()],
     // The corpus explorer (React, Observable Plot) is one ~170 kB gzipped chunk, loaded on that page only.
     build: { chunkSizeWarningLimit: 600 },
+    // Bundle the explorer's dependencies when the dev server starts, not when the page first asks
+    // for them; otherwise a restart can mix old and new chunks in the browser (two copies of React).
+    optimizeDeps: {
+      include: [
+        'react',
+        'react-dom',
+        'react-dom/client',
+        '@tanstack/react-table',
+        '@tanstack/react-virtual',
+        '@observablehq/plot',
+        'hyparquet',
+        'lucide-react',
+        'radix-ui',
+        'class-variance-authority',
+        'clsx',
+        'tailwind-merge',
+      ],
+    },
   },
 });
