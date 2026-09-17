@@ -1,20 +1,22 @@
 ---
-// The three steps from a window to its size history. The order is real, so the steps are numbered.
+// Numbered steps whose order is real: from a window to its size history on the home page, and
+// from filtering to downloading on the explorer page (compact). Step text may hold links.
 interface Props {
   steps: { title: string; text: string }[];
   more?: { text: string; link: string };
+  compact?: boolean;
 }
-const { steps, more } = Astro.props;
+const { steps, more, compact = false } = Astro.props;
 ---
 
-<div class="flow not-content">
+<div class:list={['flow not-content', { compact }]}>
   <ol>
     {
       steps.map((step, i) => (
         <li>
           <span class="n">{i + 1}</span>
           <h3>{step.title}</h3>
-          <p>{step.text}</p>
+          <p set:html={step.text} />
         </li>
       ))
     }
@@ -89,5 +91,32 @@ const { steps, more } = Astro.props;
   }
   .more:hover {
     text-decoration: underline;
+  }
+  p :global(a) {
+    color: var(--sl-color-text-accent);
+  }
+  /* compact: the number beside the title, less padding */
+  .compact li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.75rem;
+    padding: 0.85rem 1rem 0.95rem;
+  }
+  .compact .n {
+    grid-row: span 2;
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: var(--sl-text-xs);
+  }
+  .compact h3 {
+    margin: 0.05rem 0 0.25rem;
+    font-size: var(--sl-text-base);
+  }
+  @media (min-width: 50rem) {
+    .compact li:not(:last-child)::after {
+      top: 1.2rem;
+      width: 0.6rem;
+      height: 0.6rem;
+    }
   }
 </style>

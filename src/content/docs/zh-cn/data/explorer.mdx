@@ -4,8 +4,16 @@ description: 检索、筛选和查看 109,248 个模拟窗口，并下载任意�
 template: splash
 ---
 
+import Flow from '../../../../components/home/Flow.astro';
 import Explorer from '../../../../components/explorer/Explorer';
 
-按群体大小历史的类别、图谱、划分和变异位点数筛选 [`NeCast-simulations`](../simulations/) 的 109,248 个窗口。点击一个窗口可以查看它的 64 个区间标签并下载；表格上方的按钮可以为全部所选窗口生成下载脚本。
+<Flow
+  compact
+  steps={[
+    { title: '筛选', text: '按历史类别、图谱、划分或变异位点数缩小 <a href="../simulations/">NeCast-simulations</a> 的窗口范围，或者从推荐的选择开始。' },
+    { title: '查看', text: '点击一个窗口，查看它的 64 个区间标签和所在的文件。' },
+    { title: '下载', text: '在窗口面板里下载单个窗口，或者把整组选择导出为 Python 脚本或 aria2 清单。' },
+  ]}
+/>
 
 <Explorer client:only="react" lang="zh" />

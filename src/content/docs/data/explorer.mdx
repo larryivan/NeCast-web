@@ -4,10 +4,16 @@ description: Search, filter and inspect the 109,248 simulated windows, and downl
 template: splash
 ---
 
+import Flow from '../../../components/home/Flow.astro';
 import Explorer from '../../../components/explorer/Explorer';
 
-Filter the 109,248 windows of [`NeCast-simulations`](../simulations/) by family of size history, map,
-split and number of variant sites. Click a window to see its 64 interval labels and to download
-it. The buttons above the table write a download script for the whole selection.
+<Flow
+  compact
+  steps={[
+    { title: 'Filter', text: 'Narrow the windows of <a href="../simulations/">NeCast-simulations</a> by family, map, split or number of variant sites, or start from a suggestion.' },
+    { title: 'Inspect', text: 'Click a window to see its 64 interval labels and the file that holds it.' },
+    { title: 'Download', text: 'Download one window from its panel, or the whole selection as a Python script or an aria2 list.' },
+  ]}
+/>
 
 <Explorer client:only="react" lang="en" />
