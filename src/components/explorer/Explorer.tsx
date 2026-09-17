@@ -10,7 +10,7 @@ import {
   tableFeatures,
   useTable,
 } from '@tanstack/react-table';
-import { ArrowDown, ArrowUp, ArrowUpDown, Check, Copy, Download, ExternalLink, Link2, SlidersHorizontal } from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, Check, ChevronRight, Copy, Download, ExternalLink, Link2, SlidersHorizontal, X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -262,7 +262,7 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
   const tableRows = table.getRowModel().rows;
   const scrollRef = useRef<HTMLDivElement>(null);
   const virtualizer = useVirtualizer({ count: tableRows.length, getScrollElement: () => scrollRef.current, estimateSize: () => 36, overscan: 14 });
-  const grid = 'grid grid-cols-[8.2rem_minmax(9rem,1.6fr)_minmax(5.5rem,0.9fr)_minmax(7.5rem,1fr)_5.5rem_6.5rem] gap-x-3 items-center';
+  const grid = 'grid grid-cols-[8.2rem_minmax(9rem,1.6fr)_minmax(5.5rem,0.9fr)_minmax(7.5rem,1fr)_5.5rem_6.5rem_1rem] gap-x-3 items-center';
 
   // selection, and ?w= in the address bar so a window can be shared
   const rowOfWindow = useCallback(
@@ -382,6 +382,33 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
 
   const { summary, cols } = data;
   const sel = selected;
+
+  // the active filters, each removable on its own
+  const chips: { key: string; label: string; remove: () => void }[] = [];
+  if (query.trim()) chips.push({ key: 'q', label: `${t.windowChip} ${query.trim()}`, remove: () => setQuery('') });
+  families.forEach((i) => chips.push({ key: `f${i}`, label: FAMILY_NAMES[summary.families[i].key][lang], remove: () => setFamilies(toggle(families, i)) }));
+  maps.forEach((i) => chips.push({ key: `m${i}`, label: MAP_NAMES[summary.maps[i].key][lang], remove: () => setMaps(toggle(maps, i)) }));
+  groups.forEach((i) => chips.push({ key: `g${i}`, label: GROUPS[i].name[lang], remove: () => setGroups(toggle(groups, i)) }));
+  if (sitesRange !== null && (range[0] > sitesDomain[0] || range[1] < sitesDomain[1])) {
+    const lo = range[0] <= sitesDomain[0] ? summary.sites.min : Math.round(10 ** range[0]);
+    const hi = range[1] >= sitesDomain[1] ? summary.sites.max : Math.round(10 ** range[1]);
+    chips.push({ key: 's', label: `${t.sites} ${formatInt(lo, lang)}–${formatInt(hi, lang)}`, remove: () => setSitesRange(null) });
+  }
+
+  // with no filter on, a few selections to start from (counts are of the whole corpus then)
+  const familyIndex = (key: string) => summary.families.findIndex((f) => f.key === key);
+  const testGroup = GROUPS.findIndex((g) => g.key === 'test');
+  const humanFamily = familyIndex('empirical_human_ne_template');
+  const stdpopsimFamily = familyIndex('stdpopsim_single_pop');
+  const cleanMap = summary.maps.findIndex((m) => m.key === 'constant_clean');
+  const picks = [
+    { key: 'test', label: t.pickTest, count: testGroup >= 0 ? result.groupCounts[testGroup] : 0, apply: () => setGroups(new Set([testGroup])) },
+    { key: 'human', label: t.pickHuman, count: humanFamily >= 0 ? result.famCounts[humanFamily] : 0, apply: () => setFamilies(new Set([humanFamily])) },
+    { key: 'stdpopsim', label: t.pickStdpopsim, count: stdpopsimFamily >= 0 ? result.famCounts[stdpopsimFamily] : 0, apply: () => setFamilies(new Set([stdpopsimFamily])) },
+    { key: 'clean', label: t.pickClean, count: cleanMap >= 0 ? result.mapCounts[cleanMap] : 0, apply: () => setMaps(new Set([cleanMap])) },
+  ].filter((p) => p.count > 0);
+  const chipClass =
+    'inline-flex items-center gap-1.5 rounded-full border bg-background px-2.5 py-1 text-xs leading-none text-foreground transition-colors hover:border-primary hover:text-primary';
   const selWindow = sel === null ? 0 : cols.window[sel];
   const selPath = fragmentPath(selWindow);
   const readCode = [
@@ -454,45 +481,81 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
         <Button variant="outline" onClick={() => setFiltersOpen(!filtersOpen)}>
           <SlidersHorizontal />
           {t.showFilters}
+          {chips.length > 0 && <span className="rounded-full bg-primary px-1.5 text-xs text-primary-foreground tabular-nums">{chips.length}</span>}
         </Button>
       </div>
       <aside className={`${filtersOpen ? 'block' : 'hidden'} lg:block`}>{filters}</aside>
 
       <section className="flex min-w-0 flex-col gap-4">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <p className="m-0 text-sm">
-            <strong className="text-2xl font-semibold tabular-nums">{formatInt(result.rows.length, lang)}</strong>{' '}
-            {t.matching} · {t.inFiles} {formatInt(result.files, lang)} {t.files}
-            {lang === 'zh' ? `（${formatBytes(result.bytes, lang)}）` : ` (${formatBytes(result.bytes, lang)})`}
-            <span className="text-muted-foreground">
-              {' '}
-              · {t.of} {formatInt(cols.n, lang)} {t.allWindows}
-            </span>
-          </p>
-          <div className="flex flex-wrap gap-2">
-            <Button size="sm" disabled={result.rows.length === 0} onClick={() => exportSelection('python')}>
-              <Download />
-              {t.script}
-            </Button>
-            <Button size="sm" variant="outline" disabled={result.rows.length === 0} onClick={() => exportSelection('aria2')}>
-              {t.aria2}
-            </Button>
-            <Button size="sm" variant="outline" disabled={result.rows.length === 0} onClick={() => exportSelection('aria2-mirror')}>
-              {t.aria2Mirror}
-            </Button>
+        <div className="flex flex-col gap-3 rounded-xl border bg-muted/30 p-4">
+          <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
+            <div className="min-w-0">
+              <p className="m-0 text-xs font-semibold tracking-wide text-muted-foreground uppercase">{t.selection}</p>
+              <p className="m-0 mt-1 text-sm">
+                <strong className="text-3xl font-semibold tabular-nums">{formatInt(result.rows.length, lang)}</strong>{' '}
+                {t.matching}
+                <span className="text-muted-foreground">
+                  {' '}
+                  · {t.inFiles} {formatInt(result.files, lang)} {t.files}
+                  {lang === 'zh' ? `（${formatBytes(result.bytes, lang)}）` : ` (${formatBytes(result.bytes, lang)})`} · {t.of}{' '}
+                  {formatInt(cols.n, lang)} {t.allWindows}
+                </span>
+              </p>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <p className="m-0 text-xs font-semibold tracking-wide text-muted-foreground uppercase">{t.export}</p>
+              <div className="flex flex-wrap gap-2">
+                <Button size="sm" disabled={result.rows.length === 0} onClick={() => exportSelection('python')}>
+                  <Download />
+                  {t.script}
+                </Button>
+                <Button size="sm" variant="outline" disabled={result.rows.length === 0} onClick={() => exportSelection('aria2')}>
+                  {t.aria2}
+                </Button>
+                <Button size="sm" variant="outline" disabled={result.rows.length === 0} onClick={() => exportSelection('aria2-mirror')}>
+                  {t.aria2Mirror}
+                </Button>
+              </div>
+            </div>
           </div>
+          {chips.length > 0 ? (
+            <div className="flex flex-wrap items-center gap-2" role="group" aria-label={t.activeFilters}>
+              {chips.map((c) => (
+                <button key={c.key} type="button" className={chipClass} onClick={c.remove} aria-label={`${t.remove}: ${c.label}`}>
+                  {c.label}
+                  <X className="size-3" />
+                </button>
+              ))}
+              <button type="button" className="text-xs font-medium text-primary hover:underline" onClick={reset}>
+                {t.clearAll}
+              </button>
+            </div>
+          ) : (
+            picks.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-xs text-muted-foreground">{t.startWith}</span>
+                {picks.map((p) => (
+                  <button key={p.key} type="button" className={chipClass} onClick={p.apply}>
+                    {p.label}
+                    <span className="text-muted-foreground tabular-nums">{formatInt(p.count, lang)}</span>
+                  </button>
+                ))}
+              </div>
+            )
+          )}
+          <p className="m-0 text-xs leading-relaxed text-muted-foreground">
+            {t.exportNote} {t.mirrorNote}
+          </p>
         </div>
-        <p className="m-0 text-xs text-muted-foreground">
-          {t.exportNote} {t.mirrorNote}
-        </p>
 
         <div>
           <SitesHistogram bins={histogram} xLabel={t.sites} colour={ACCENT} />
           <p className="m-0 text-xs text-muted-foreground">{t.histNote}</p>
         </div>
 
+        <p className="m-0 -mb-2 text-xs text-muted-foreground">{t.clickHint}</p>
         <div className="overflow-x-auto rounded-lg border">
-          <div className="min-w-[44rem]">
+          <div className="min-w-[45rem]">
           <div className={`${grid} border-b bg-muted/50 px-3 py-2 text-xs font-semibold text-muted-foreground`}>
             {table.getHeaderGroups()[0]?.headers.map((header) => {
               const dir = header.column.getIsSorted();
@@ -508,6 +571,7 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
                 </button>
               );
             })}
+            <span aria-hidden="true" />
           </div>
           <div ref={scrollRef} className="h-[30rem] overflow-y-auto">
             {tableRows.length === 0 ? (
@@ -522,7 +586,7 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
                       key={row.id}
                       type="button"
                       onClick={() => setSelected(row.original.i)}
-                      className={`${grid} absolute top-0 left-0 w-full border-b px-3 text-left text-sm hover:bg-accent/60 ${active ? 'bg-accent' : ''}`}
+                      className={`${grid} group absolute top-0 left-0 w-full border-b px-3 text-left text-sm outline-none hover:bg-accent/60 focus-visible:bg-accent/60 ${active ? 'bg-accent' : ''}`}
                       style={{ height: v.size, transform: `translateY(${v.start}px)` }}
                     >
                       {row.getAllCells().map((cell) => (
@@ -530,6 +594,7 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
                           <table.FlexRender cell={cell} />
                         </span>
                       ))}
+                      <ChevronRight className="size-4 text-muted-foreground opacity-40 transition-opacity group-hover:opacity-100" aria-hidden="true" />
                     </button>
                   );
                 })}
