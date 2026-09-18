@@ -1,32 +1,87 @@
 ---
-// The page title, with the sidebar group that holds the page above it and the page's one-line
-// summary (its description) below, so every page says where it sits and what it is for.
+// The page title and its one-line summary (the page's description). A page of a section with
+// several pages (Data) shows that section's pages above its title, the current one marked; the
+// sections themselves are the tabs under the header.
 const { entry, sidebar } = Astro.locals.starlightRoute;
 const { title, description } = entry.data;
 
-type Entry = { type: 'link'; isCurrent: boolean } | { type: 'group'; label: string; entries: Entry[] };
-const holds = (e: Entry): boolean => (e.type === 'link' ? e.isCurrent : e.entries.some(holds));
-const group = (sidebar as Entry[]).find((e) => e.type === 'group' && holds(e)) as { label: string } | undefined;
+type Link = { type: 'link'; href: string; label: string; isCurrent: boolean };
+type Group = { type: 'group'; label: string; entries: (Link | Group)[] };
+const pagesOf = (e: Link | Group): Link[] => (e.type === 'link' ? [e] : e.entries.flatMap(pagesOf));
+const section = (sidebar as (Link | Group)[]).find((e): e is Group => e.type === 'group' && pagesOf(e).some((p) => p.isCurrent));
+const pages = section ? pagesOf(section) : [];
 ---
 
 <div class="page-title">
-  {group && <p class="group">{group.label}</p>}
+  {
+    pages.length > 1 && (
+      <nav class="subnav" aria-label={section!.label}>
+        {pages.map((p) => (
+          <a href={p.href} aria-current={p.isCurrent ? 'page' : undefined}>
+            {p.label}
+          </a>
+        ))}
+      </nav>
+    )
+  }
   <h1 id="_top">{title}</h1>
   {description && <p class="lead">{description}</p>}
 </div>
+
+<script>
+  // on a narrow screen the row of pages scrolls sideways; bring the current page into view
+  for (const nav of document.querySelectorAll<HTMLElement>('.subnav')) {
+    const current = nav.querySelector<HTMLElement>('[aria-current="page"]');
+    if (current && nav.scrollWidth > nav.clientWidth) {
+      nav.scrollLeft = current.offsetLeft - (nav.clientWidth - current.offsetWidth) / 2;
+    }
+  }
+</script>
 
 <style>
   @layer starlight.core {
     .page-title {
       margin-top: 1rem;
     }
-    .group {
-      margin: 0 0 0.5rem;
-      font-size: var(--sl-text-xs);
+    .subnav {
+      position: relative;
+      display: flex;
+      gap: 0.2rem;
+      width: fit-content;
+      max-width: 100%;
+      margin-bottom: 1.5rem;
+      padding: 0.25rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+      border-radius: 0.75rem;
+      background: color-mix(in srgb, var(--sl-color-gray-6) 60%, var(--sl-color-bg));
+    }
+    .subnav::-webkit-scrollbar {
+      display: none;
+    }
+    .subnav a {
+      flex: none;
+      padding: 0.35rem 0.85rem;
+      border-radius: 0.55rem;
+      font-size: var(--sl-text-sm);
+      font-weight: 500;
+      white-space: nowrap;
+      color: var(--sl-color-gray-2);
+      text-decoration: none;
+    }
+    .subnav a:hover {
+      color: var(--sl-color-white);
+    }
+    .subnav a[aria-current='page'] {
+      background: var(--sl-color-bg);
+      box-shadow:
+        0 1px 2px rgb(0 0 0 / 0.08),
+        0 0 0 1px var(--sl-color-hairline-light);
       font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--sl-color-accent);
+      color: var(--sl-color-white);
+    }
+    :global([data-theme='dark']) .subnav a[aria-current='page'] {
+      background: var(--sl-color-gray-5);
     }
     h1 {
       margin: 0;

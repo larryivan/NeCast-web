@@ -44,29 +44,27 @@ export default defineConfig({
       customCss: ['./src/styles/global.css'],
       // fails the build on a broken internal link, in either language
       plugins: [starlightLinksValidator({ errorOnRelativeLinks: false })],
+      // The site's sections, in the order of the tabs under the header (after Home). Pages have no
+      // left sidebar (src/routeData.ts); a section with several pages lists them at the top of each.
       sidebar: [
-        {
-          label: 'Method',
-          translations: { 'zh-CN': '原理' },
-          items: [{ slug: 'method' }, { slug: 'model' }],
-        },
+        { label: 'Method', translations: { 'zh-CN': '原理' }, items: [{ slug: 'method' }] },
         {
           label: 'Data',
           translations: { 'zh-CN': '数据' },
           items: [
-            { slug: 'data' },
-            { slug: 'data/explorer' },
-            { slug: 'data/simulations' },
-            { slug: 'data/benchmark' },
-            { slug: 'data/1000g' },
+            { slug: 'data', label: 'Overview', translations: { 'zh-CN': '总览' } },
+            { slug: 'data/simulations', label: 'Simulated corpus', translations: { 'zh-CN': '模拟语料' } },
+            { slug: 'data/benchmark', label: 'Benchmark', translations: { 'zh-CN': '基准' } },
+            { slug: 'data/1000g', label: '1000 Genomes', translations: { 'zh-CN': '千人基因组' } },
+            { slug: 'model', label: 'Trained network', translations: { 'zh-CN': '训练好的网络' } },
           ],
         },
-        {
-          label: 'About',
-          translations: { 'zh-CN': '关于' },
-          items: [{ slug: 'about' }],
-        },
+        { label: 'Explorer', translations: { 'zh-CN': '语料浏览器' }, items: [{ slug: 'data/explorer' }] },
+        { label: 'Authors', translations: { 'zh-CN': '作者' }, items: [{ slug: 'about' }] },
       ],
+      routeMiddleware: './src/routeData.ts',
+      // the previous and next links crossed from one section to another; the tabs replace them
+      pagination: false,
     }),
     react(),
   ],

@@ -1,41 +1,32 @@
 ---
-// Starlight's header bar, with a row of the site's sections below it. The home page and the
-// explorer have no sidebar, and phones hide the sidebar, so this row is the one menu that every
-// page shows. The tab of the current section is marked.
+// Starlight's header bar, with the site's one menu below it: Home, then a tab for each section
+// of the sidebar configuration (astro.config.mjs). No page has a left sidebar, so this row is
+// the menu everywhere; the tab of the current section is marked.
 import Default from '@astrojs/starlight/components/Header.astro';
 
-const lang = Astro.locals.starlightRoute.lang;
+const { lang, sidebar } = Astro.locals.starlightRoute;
 // the 404 route keeps the root language, so the address decides there
 const zh = lang?.toLowerCase().startsWith('zh') || Astro.url.pathname.includes('/zh-cn/');
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const root = `${base}${zh ? 'zh-cn/' : ''}`;
 const path = Astro.url.pathname.startsWith(root) ? Astro.url.pathname.slice(root.length) : null;
 
-const section =
-  path === ''
-    ? 'home'
-    : path === null
-      ? null
-      : path.startsWith('data/explorer')
-        ? 'explorer'
-        : path.startsWith('data')
-          ? 'data'
-          : /^(method|model)/.test(path)
-            ? 'method'
-            : path.startsWith('about')
-              ? 'authors'
-              : null;
+type Link = { type: 'link'; href: string; label: string; isCurrent: boolean };
+type Group = { type: 'group'; label: string; entries: (Link | Group)[] };
+const pagesOf = (e: Link | Group): Link[] => (e.type === 'link' ? [e] : e.entries.flatMap(pagesOf));
 
 const tabs = [
-  { key: 'home', label: zh ? '首页' : 'Home', href: root },
-  { key: 'method', label: zh ? '原理' : 'Method', href: `${root}method/` },
-  { key: 'data', label: zh ? '数据' : 'Data', href: `${root}data/` },
-  { key: 'explorer', label: zh ? '语料浏览器' : 'Explorer', href: `${root}data/explorer/` },
-  { key: 'authors', label: zh ? '作者' : 'Authors', href: `${root}about/` },
+  { label: zh ? '首页' : 'Home', href: root, current: path === '' },
+  ...(sidebar as (Link | Group)[])
+    .filter((e): e is Group => e.type === 'group')
+    .map((g) => {
+      const pages = pagesOf(g);
+      return { label: g.label, href: pages[0].href, current: pages.some((p) => p.isCurrent) };
+    }),
 ];
 
-// phones show no language menu on pages without a sidebar, so the row links the other language
-const other = path !== null && !path.startsWith('404') ? `${base}${zh ? '' : 'zh-cn/'}${path}` : `${base}${zh ? '' : 'zh-cn/'}`;
+// phones show no language menu, so the row links the same page in the other language
+const other = `${base}${zh ? '' : 'zh-cn/'}${path !== null && !path.startsWith('404') ? path : ''}`;
 ---
 
 <div class="necast-header">
@@ -45,7 +36,7 @@ const other = path !== null && !path.startsWith('404') ? `${base}${zh ? '' : 'zh
       {
         tabs.map((t) => (
           <li>
-            <a href={t.href} aria-current={t.key === section ? 'page' : undefined}>
+            <a href={t.href} aria-current={t.current ? 'page' : undefined}>
               {t.label}
             </a>
           </li>
@@ -83,10 +74,6 @@ const other = path !== null && !path.startsWith('404') ? `${base}${zh ? '' : 'zh
   .tabs::-webkit-scrollbar {
     display: none;
   }
-  /* on phones Starlight pads the header's end for the menu button; the row runs under it */
-  :global([data-has-sidebar]) .tabs {
-    margin-inline-end: calc(-1 * (var(--sl-nav-gap) + var(--sl-nav-pad-x) + var(--sl-menu-button-size)));
-  }
   ul {
     display: flex;
     gap: 1rem;
@@ -120,9 +107,6 @@ const other = path !== null && !path.startsWith('404') ? `${base}${zh ? '' : 'zh
   }
   /* from 50rem the header bar has its own language menu, and the tabs get more room */
   @media (min-width: 50rem) {
-    :global([data-has-sidebar]) .tabs {
-      margin-inline-end: calc(-1 * var(--sl-nav-pad-x));
-    }
     ul {
       gap: 1.6rem;
     }

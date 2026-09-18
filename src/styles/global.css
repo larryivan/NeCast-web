@@ -25,8 +25,8 @@
 }
 
 /* The header is Starlight's bar plus a row of the site's sections (overrides/Header.astro).
-   Starlight places the sidebar, the contents bar and the page below --sl-nav-height, so that
-   height covers both rows; the logo and the phone menu button keep the bar's own height. */
+   Starlight places the contents bar and the page below --sl-nav-height, so that height covers
+   both rows; the logo keeps the bar's own height. */
 :root {
   --necast-bar-height: 3.5rem;
   --necast-tabs-height: 2.5rem;
@@ -40,9 +40,6 @@
 }
 .site-title img {
   height: calc(var(--necast-bar-height) - 2 * var(--sl-nav-pad-y));
-}
-.sl-menu-button {
-  top: calc((var(--necast-bar-height) - var(--sl-menu-button-size)) / 2);
 }
 
 /* System fonts only: nothing is downloaded, which matters most for readers in mainland China. */
@@ -174,14 +171,6 @@ header.header {
   background-color: color-mix(in srgb, var(--sl-color-bg-nav) 84%, transparent);
   -webkit-backdrop-filter: saturate(1.4) blur(12px);
   backdrop-filter: saturate(1.4) blur(12px);
-}
-
-/* The current page in the sidebar: a tint of the accent instead of a solid block. */
-.sidebar-content a[aria-current='page'],
-.sidebar-content a[aria-current='page']:hover,
-.sidebar-content a[aria-current='page']:focus {
-  background-color: var(--sl-color-accent-low);
-  color: var(--sl-color-text-accent);
 }
 
 /* Previous and next links: a light frame that takes the accent on hover. */
