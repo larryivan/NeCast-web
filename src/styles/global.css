@@ -116,6 +116,10 @@
   }
   /* Tailwind's reset is not loaded, so native buttons (table rows, headers) would keep the
      browser's button background, which shows in dark mode. Utilities still override this. */
+  /* links drawn as buttons (shadcn's asChild) keep the button look, without an underline */
+  .necast-ui a[data-slot='button'] {
+    text-decoration: none;
+  }
   .necast-ui button {
     font: inherit;
     color: inherit;

@@ -645,30 +645,36 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
                   <dd className="tabular-nums">{formatInt(cols.sites[sel], lang)}</dd>
                   <dt className="text-muted-foreground">{t.neRange}</dt>
                   <dd className="tabular-nums">{`${formatNe(cols.neMin[sel])}–${formatNe(cols.neMax[sel])}`}</dd>
-                  <dt className="text-muted-foreground">{t.file}</dt>
-                  <dd className="font-mono text-xs break-all">
-                    {selPath} · {t.member} {selWindow % 4}
-                  </dd>
-                  <dt className="text-muted-foreground">{t.size}</dt>
-                  <dd>{formatBytes(cols.npzBytes[sel] + cols.jsonlBytes[sel], lang)}</dd>
                 </dl>
                 <div>
                   <h3 className="mb-2 text-sm font-semibold">{t.download}</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {[selPath, metadataPath(selPath)].map((p) => (
-                      <span key={p} className="flex gap-2">
-                        <Button asChild size="sm" variant="outline">
-                          <a href={`${HF_BASE}${p}`}>
-                            <Download />
-                            {p.endsWith('.npz') ? '.npz' : '.jsonl.gz'} · {t.official}
-                          </a>
-                        </Button>
-                        <Button asChild size="sm" variant="ghost">
-                          <a href={`${MIRROR_BASE}${p}`}>{t.mirror}</a>
-                        </Button>
-                      </span>
+                  <ul className="m-0 flex list-none flex-col divide-y rounded-lg border p-0">
+                    {[
+                      { path: selPath, label: t.npzLabel, bytes: cols.npzBytes[sel] },
+                      { path: metadataPath(selPath), label: t.jsonlLabel, bytes: cols.jsonlBytes[sel] },
+                    ].map((f) => (
+                      <li key={f.path} className="m-0 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-2.5">
+                        <div className="min-w-0">
+                          <p className="m-0 text-sm font-medium">{f.label}</p>
+                          <p className="m-0 font-mono text-xs break-all text-muted-foreground">
+                            {f.path} · {formatBytes(f.bytes, lang)}
+                          </p>
+                        </div>
+                        <div className="flex gap-1.5">
+                          <Button asChild size="sm">
+                            <a href={`${HF_BASE}${f.path}`}>
+                              <Download />
+                              {t.official}
+                            </a>
+                          </Button>
+                          <Button asChild size="sm" variant="outline">
+                            <a href={`${MIRROR_BASE}${f.path}`}>{t.mirror}</a>
+                          </Button>
+                        </div>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
+                  <p className="m-0 mt-2 text-xs text-muted-foreground">{t.fileNote.replace('{k}', String(selWindow % 4))}</p>
                 </div>
                 <div>
                   <div className="mb-2 flex items-center justify-between">

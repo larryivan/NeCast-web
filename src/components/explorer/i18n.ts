@@ -117,6 +117,9 @@ export const T = {
     remove: 'Remove',
     windowChip: 'Window',
     clickHint: 'Click a window to see its labels and download it.',
+    npzLabel: 'Genotypes, maps and labels',
+    jsonlLabel: 'Simulation parameters',
+    fileNote: 'Both files hold this window (member {k}) and the three others stored with it.',
   },
   zh: {
     loading: '正在载入 109,248 个窗口的索引……',
@@ -178,6 +181,9 @@ export const T = {
     remove: '移除',
     windowChip: '窗口',
     clickHint: '点击一个窗口，查看标签并下载。',
+    npzLabel: '基因型、图谱和标签',
+    jsonlLabel: '模拟参数',
+    fileNote: '两个文件都包含这个窗口（第 {k} 个）和与它存在一起的另外 3 个窗口。',
   },
 } as const;
 
