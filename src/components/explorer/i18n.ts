@@ -120,6 +120,8 @@ export const T = {
     npzLabel: 'Genotypes, maps and labels',
     jsonlLabel: 'Simulation parameters',
     fileNote: 'Both files hold this window (member {k}) and the three others stored with it.',
+    prevWindow: 'Previous window (←)',
+    nextWindow: 'Next window (→)',
   },
   zh: {
     loading: '正在载入 109,248 个窗口的索引……',
@@ -184,6 +186,8 @@ export const T = {
     npzLabel: '基因型、图谱和标签',
     jsonlLabel: '模拟参数',
     fileNote: '两个文件都包含这个窗口（第 {k} 个）和与它存在一起的另外 3 个窗口。',
+    prevWindow: '上一个窗口（←）',
+    nextWindow: '下一个窗口（→）',
   },
 } as const;
 

@@ -10,7 +10,7 @@ import {
   tableFeatures,
   useTable,
 } from '@tanstack/react-table';
-import { ArrowDown, ArrowUp, ArrowUpDown, Check, ChevronRight, Copy, Download, ExternalLink, Link2, SlidersHorizontal, X } from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, Check, ChevronLeft, ChevronRight, Copy, Download, ExternalLink, Link2, SlidersHorizontal, X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -262,6 +262,18 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
   const tableRows = table.getRowModel().rows;
   const scrollRef = useRef<HTMLDivElement>(null);
   const virtualizer = useVirtualizer({ count: tableRows.length, getScrollElement: () => scrollRef.current, estimateSize: () => 36, overscan: 14 });
+
+  // the open window's place in the table as filtered and sorted, for previous and next
+  const selIndex = useMemo(() => (selected === null ? -1 : tableRows.findIndex((r) => r.original.i === selected)), [tableRows, selected]);
+  const step = useCallback(
+    (delta: number) => {
+      const k = selIndex + delta;
+      if (selIndex < 0 || k < 0 || k >= tableRows.length) return;
+      setSelected(tableRows[k].original.i);
+      virtualizer.scrollToIndex(k, { align: 'auto' });
+    },
+    [selIndex, tableRows, virtualizer],
+  );
   const grid = 'grid grid-cols-[8.2rem_minmax(9rem,1.6fr)_minmax(5.5rem,0.9fr)_minmax(7.5rem,1fr)_5.5rem_6.5rem_1rem] gap-x-3 items-center';
 
   // selection, and ?w= in the address bar so a window can be shared
@@ -606,11 +618,46 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
       </section>
 
       <Sheet open={sel !== null} onOpenChange={(open) => !open && setSelected(null)}>
-        <SheetContent className="necast-ui w-full gap-0 overflow-y-auto data-[side=right]:w-full data-[side=right]:sm:max-w-xl">
+        <SheetContent
+          className="necast-ui w-full gap-0 overflow-y-auto data-[side=right]:w-full data-[side=right]:sm:max-w-xl"
+          onKeyDown={(e) => {
+            const tag = (e.target as HTMLElement).tagName;
+            if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+            if (e.key === 'ArrowLeft') {
+              e.preventDefault();
+              step(-1);
+            } else if (e.key === 'ArrowRight') {
+              e.preventDefault();
+              step(1);
+            }
+          }}
+        >
           {sel !== null && (
             <>
               <SheetHeader>
-                <SheetTitle className="font-mono">{sampleId(selWindow)}</SheetTitle>
+                <div className="flex items-center gap-2 pr-9">
+                  <SheetTitle className="font-mono">{sampleId(selWindow)}</SheetTitle>
+                  {selIndex >= 0 && (
+                    <div className="ml-auto flex items-center gap-1">
+                      <Button size="icon-sm" variant="outline" disabled={selIndex <= 0} onClick={() => step(-1)} aria-label={t.prevWindow} title={t.prevWindow}>
+                        <ChevronLeft />
+                      </Button>
+                      <span className="min-w-[5rem] text-center text-xs text-muted-foreground tabular-nums">
+                        {formatInt(selIndex + 1, lang)} / {formatInt(tableRows.length, lang)}
+                      </span>
+                      <Button
+                        size="icon-sm"
+                        variant="outline"
+                        disabled={selIndex >= tableRows.length - 1}
+                        onClick={() => step(1)}
+                        aria-label={t.nextWindow}
+                        title={t.nextWindow}
+                      >
+                        <ChevronRight />
+                      </Button>
+                    </div>
+                  )}
+                </div>
                 <SheetDescription className="flex flex-wrap gap-1.5">
                   <Badge variant="secondary">
                     <span className="size-2 rounded-full" style={{ background: summary.families[cols.family[sel]].colour }} />
