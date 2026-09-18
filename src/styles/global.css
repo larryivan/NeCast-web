@@ -42,6 +42,15 @@
   height: calc(var(--necast-bar-height) - 2 * var(--sl-nav-pad-y));
 }
 
+/* No page has a left sidebar (src/routeData.ts), and Starlight then widens the content to the
+   splash width. Pages with a table of contents keep a reading width instead, centred. */
+html:not([data-has-sidebar])[data-has-toc] {
+  --sl-content-width: 46rem;
+}
+html:not([data-has-sidebar]) .main-pane .sl-container {
+  margin-inline: auto;
+}
+
 /* System fonts only: nothing is downloaded, which matters most for readers in mainland China. */
 :root[lang='zh-CN'] {
   --sl-font: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
