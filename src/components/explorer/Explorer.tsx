@@ -653,7 +653,7 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
                       { path: selPath, label: t.npzLabel, bytes: cols.npzBytes[sel] },
                       { path: metadataPath(selPath), label: t.jsonlLabel, bytes: cols.jsonlBytes[sel] },
                     ].map((f) => (
-                      <li key={f.path} className="m-0 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-2.5">
+                      <li key={f.path} className="m-0 grid grid-cols-1 items-center gap-2 px-3 py-2.5 sm:grid-cols-[minmax(0,1fr)_auto] sm:gap-3">
                         <div className="min-w-0">
                           <p className="m-0 text-sm font-medium">{f.label}</p>
                           <p className="m-0 font-mono text-xs break-all text-muted-foreground">
