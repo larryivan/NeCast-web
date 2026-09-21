@@ -4,45 +4,61 @@ The mark is an N drawn as a step function: the left stem rises, a high plateau s
 to a low plateau, and the right stem rises again, the shape of a population history with a
 bottleneck. White on a blue tile whose gradient centres on the NeCast blue (#1F4E9E).
 
+The N is drawn as an outline on a 64-unit grid rather than as a stroked line, so each part has
+its own measure: stems 5 units wide, treads 4.6 high (a horizontal looks heavier than a vertical
+of the same width), 3.6 units of blue between neighbouring verticals, so the steps stay open at
+small sizes. Outer corners turn with a radius of 4.2, inner ones with 0.6, and the two ends are
+round and reach 0.35 past the top and bottom edges, so they look as tall as the flat edges.
+
     python brand/build_brand.py            # writes brand/*.svg, public/favicon.svg, src/assets/logo.svg
     node brand/render_png.mjs              # then the PNG sizes, with headless Chrome
 """
+import math
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 BLUE, TOP, BOTTOM = "#1F4E9E", "#2C62BF", "#163C80"
 
-
-def rounded(points, r):
-    """Polyline through points, each bend rounded on the centre line with radius r."""
-    d = f"M{points[0][0]:.2f} {points[0][1]:.2f}"
-    for k in range(1, len(points) - 1):
-        (xa, ya), (xb, yb), (xc, yc) = points[k - 1], points[k], points[k + 1]
-
-        def toward(x0, y0, x1, y1):
-            length = ((x1 - x0) ** 2 + (y1 - y0) ** 2) ** 0.5
-            return x0 + (x1 - x0) * r / length, y0 + (y1 - y0) * r / length
-
-        (x1, y1), (x2, y2) = toward(xb, yb, xa, ya), toward(xb, yb, xc, yc)
-        d += f"L{x1:.2f} {y1:.2f}Q{xb:.2f} {yb:.2f} {x2:.2f} {y2:.2f}"
-    return d + f"L{points[-1][0]:.2f} {points[-1][1]:.2f}"
+STEM, TREAD, GAP, DROP = 5.0, 4.6, 3.6, 14.5
+OUTER, INNER, OVERSHOOT = 4.2, 0.6, 0.35
+CENTRE = (32.0, 31.5)  # a little above the middle of the tile
 
 
-# the N on a 64-unit grid: stems at x 20.5 and 43.5, from y 18.5 to 45.5; three treads, two drops
-X0, X1, Y0, Y1 = 20.5, 43.5, 18.5, 45.5
-TREAD, DROP = (X1 - X0) / 3, (Y1 - Y0) / 2
-POINTS = [(X0, Y1), (X0, Y0), (X0 + TREAD, Y0), (X0 + TREAD, Y0 + DROP), (X0 + 2 * TREAD, Y0 + DROP),
-          (X0 + 2 * TREAD, Y1), (X1, Y1), (X1, Y0)]
-STROKE = 5.5
-# Each bend is rounded with half the stroke width on the centre line: the outer edge then turns
-# with a radius of one stroke width and the inner edge meets in a clean corner. The treads are too
-# short for a larger radius; it would leave notches where neighbouring bends meet.
-GLYPH = rounded(POINTS, STROKE / 2)
+def outline(vertices):
+    """Closed path through the vertices, each corner ((x, y), r) turned with a circular arc of radius r."""
+    corners = []
+    for k, ((x, y), r) in enumerate(vertices):
+        (xp, yp), (xn, yn) = vertices[k - 1][0], vertices[(k + 1) % len(vertices)][0]
+        li, lo = math.hypot(x - xp, y - yp), math.hypot(xn - x, yn - y)
+        di, do = ((x - xp) / li, (y - yp) / li), ((xn - x) / lo, (yn - y) / lo)
+        sweep = 1 if di[0] * do[1] - di[1] * do[0] > 0 else 0
+        corners.append(((x - di[0] * r, y - di[1] * r), (x + do[0] * r, y + do[1] * r), r, sweep))
+    d = "M{:.2f} {:.2f}".format(*corners[0][1])
+    for (x1, y1), (x2, y2), r, sweep in corners[1:] + corners[:1]:
+        d += f"L{x1:.2f} {y1:.2f}A{r:.2f} {r:.2f} 0 0 {sweep} {x2:.2f} {y2:.2f}"
+    return d + "Z"
 
 
-def glyph(color, width=STROKE):
-    return (f'<path d="{GLYPH}" fill="none" stroke="{color}" stroke-width="{width}" '
-            f'stroke-linecap="round" stroke-linejoin="round"/>')
+# the four verticals (stems and risers) and the three tread levels, centred on CENTRE
+pitch = STEM + GAP
+width, height = 3 * pitch + STEM, 2 * DROP + TREAD
+xs = [CENTRE[0] - width / 2 + STEM / 2 + k * pitch for k in range(4)]
+ys = [CENTRE[1] - height / 2 + TREAD / 2 + k * DROP for k in range(3)]
+v, h, end = STEM / 2, TREAD / 2, STEM / 2
+top, bottom = ys[0] - h, ys[2] + h
+# clockwise from the foot of the left stem
+GLYPH = outline([
+    ((xs[0] - v, bottom + OVERSHOOT), end), ((xs[0] - v, top), OUTER), ((xs[1] + v, top), OUTER),
+    ((xs[1] + v, ys[1] - h), INNER), ((xs[2] + v, ys[1] - h), OUTER), ((xs[2] + v, ys[2] - h), INNER),
+    ((xs[3] - v, ys[2] - h), INNER), ((xs[3] - v, top - OVERSHOOT), end), ((xs[3] + v, top - OVERSHOOT), end),
+    ((xs[3] + v, bottom), OUTER), ((xs[2] - v, bottom), OUTER), ((xs[2] - v, ys[1] + h), INNER),
+    ((xs[1] - v, ys[1] + h), OUTER), ((xs[1] - v, ys[0] + h), INNER), ((xs[0] + v, ys[0] + h), INNER),
+    ((xs[0] + v, bottom + OVERSHOOT), end),
+])
+
+
+def glyph(color):
+    return f'<path d="{GLYPH}" fill="{color}"/>'
 
 
 def gradient(gid):
@@ -58,9 +74,8 @@ def svg(view, body, title="NeCast"):
 mark = svg("0 0 64 64", gradient("necast-tile") + '<rect width="64" height="64" rx="14.5" fill="url(#necast-tile)"/>' + glyph("#fff"))
 # full-bleed square for app icons (the platform rounds the corners itself)
 square = svg("0 0 64 64", gradient("necast-square") + '<rect width="64" height="64" fill="url(#necast-square)"/>' + glyph("#fff"))
-# the glyph alone, cropped to its stroke, in blue for light grounds and white for dark or blue ones
-pad = STROKE / 2
-crop = f"{X0 - pad:.2f} {Y0 - pad:.2f} {X1 - X0 + STROKE:.2f} {Y1 - Y0 + STROKE:.2f}"
+# the glyph alone, cropped to its outline, in blue for light grounds and white for dark or blue ones
+crop = f"{xs[0] - v:.2f} {top - OVERSHOOT:.2f} {width:.2f} {height + 2 * OVERSHOOT:.2f}"
 glyph_blue = svg(crop, glyph(BLUE))
 glyph_white = svg(crop, glyph("#fff"))
 
@@ -70,4 +85,4 @@ for name, text in {"necast-mark.svg": mark, "necast-mark-square.svg": square,
     (out / name).write_text(text)
 (ROOT / "public" / "favicon.svg").write_text(mark)
 (ROOT / "src" / "assets" / "logo.svg").write_text(mark)
-print(GLYPH)
+print(f"N {width:.1f} x {height:.1f} units, crop {crop}")
