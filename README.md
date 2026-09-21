@@ -52,6 +52,25 @@ The link-preview image reuses the hero drawing of the built home page, and needs
 npm run build && node scripts/build_social_card.mjs
 ```
 
+## Brand
+
+The NeCast mark is an N drawn as a step function: the left stem rises, a high plateau steps
+down twice, and the right stem rises again, the shape of a population history with a
+bottleneck. It is white on a blue tile whose gradient centres on the NeCast blue (#1F4E9E).
+In the name, "Ne" takes the blue.
+
+| file in `brand/` | use |
+|---|---|
+| `necast-mark.svg`, `necast-mark-1024.png`, `necast-mark-512.png` | the mark |
+| `necast-mark-square.svg` | the mark on a full square, for app icons whose platform rounds the corners |
+| `necast-glyph.svg`, `necast-glyph-white.svg` | the N alone, for light grounds and for dark or blue ones |
+| `necast-lockup.png`, `necast-lockup-dark.png` | the mark and the name, for light and dark grounds |
+
+```bash
+python brand/build_brand.py   # the SVGs, and the site's favicon and header logo
+node brand/render_png.mjs     # the PNGs and public/apple-touch-icon.png (needs Chrome)
+```
+
 ## Authors
 
 Yufan Han (larryivanhan@gmail.com) and Ke Wang, [Ke's Lab](https://www.wangke-evoanthropology.site/),
