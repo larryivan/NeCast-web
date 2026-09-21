@@ -15,6 +15,7 @@ const root = new URL('..', import.meta.url).pathname;
 const chrome = process.env.CHROME ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
 const home = readFileSync(join(root, 'dist/index.html'), 'utf8');
+const mark = readFileSync(join(root, 'src/assets/logo.svg'), 'utf8');
 const drawing = home.match(/<svg class="hero-visual[\s\S]*?<\/svg>/)?.[0];
 if (!drawing) throw new Error('No hero drawing in dist/index.html; run `npm run build` first.');
 
@@ -24,7 +25,7 @@ const html = `<!doctype html>
   html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #fff; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'PingFang SC', Arial, sans-serif; }
   .card { position: relative; box-sizing: border-box; width: 1200px; height: 630px; padding: 0 72px;
-    display: grid; grid-template-columns: 500px 1fr; gap: 48px; align-items: center; }
+    display: grid; grid-template-columns: 540px 1fr; gap: 40px; align-items: center; }
   .card::before { content: ''; position: absolute; inset: 0;
     background-image: radial-gradient(circle at 74% 50%, rgba(31, 78, 158, 0.1), transparent 34%),
       linear-gradient(to right, rgba(212, 212, 216, 0.6) 1px, transparent 1px),
@@ -33,7 +34,10 @@ const html = `<!doctype html>
     mask-image: radial-gradient(ellipse 46% 64% at 74% 50%, #000 30%, transparent 78%); }
   .text, .drawing { position: relative; }
   .eyebrow { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #1f4e9e; }
-  h1 { margin: 14px 0 0; font-size: 116px; line-height: 1; font-weight: 700; letter-spacing: -0.035em; color: #18181b; }
+  .title { display: flex; align-items: center; gap: 24px; margin-top: 18px; }
+  .mark { width: 100px; height: 100px; flex: none; }
+  .mark svg { display: block; width: 100%; height: 100%; }
+  h1 { margin: 0; font-size: 112px; line-height: 1; font-weight: 700; letter-spacing: -0.035em; color: #18181b; }
   h1 span { color: #1f4e9e; }
   .en { margin: 28px 0 0; font-size: 34px; line-height: 1.3; font-weight: 500; color: #3f3f46; }
   .zh { margin: 14px 0 0; font-size: 27px; line-height: 1.4; color: #71717a; }
@@ -51,7 +55,7 @@ const html = `<!doctype html>
 <body><div class="card">
   <div class="text">
     <p class="eyebrow">Population genetics · deep learning</p>
-    <h1><span>Ne</span>Cast</h1>
+    <div class="title"><div class="mark">${mark}</div><h1><span>Ne</span>Cast</h1></div>
     <p class="en">Population size histories from genotypes and genetic maps</p>
     <p class="zh">从基因型和遗传图谱推断群体大小历史</p>
   </div>
