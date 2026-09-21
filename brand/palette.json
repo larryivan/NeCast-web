@@ -1,0 +1,156 @@
+{
+  "version": "2026-09-21",
+  "rules": [
+    "One colour, one meaning: every colour in the paper's figures, the Hugging Face cards, the site and the logo comes from this file.",
+    "Hue marks a method. NeCast's variants, parts and inputs use NeCast's purple at five lightness steps; another method's variant is tint() of that method's colour.",
+    "Truth, text, axes and anything that belongs to no method are ink and the grey scale.",
+    "Allowed derivations: tint() (lighten in HLS) of a method colour for a variant of that method, and transparency of a colour here for bands and regions. Nothing else.",
+    "Continents are a separate, directly labelled encoding used only in population figures.",
+    "Scenario families are told apart by point shape or by panel, never by colour."
+  ],
+  "colours": {
+    "necast_deep": {
+      "hex": "#302661",
+      "meaning": "true maps (the oracle condition); the site encoder; accent text on pale purple"
+    },
+    "necast": {
+      "hex": "#5242A7",
+      "meaning": "NeCast: its curves, points and labels; the network (fusion, network inference); both maps; homozygous derived genotype; 'NeCast better'; site accent; logo"
+    },
+    "necast_mid": {
+      "hex": "#786AC4",
+      "meaning": "summary statistics; recombination-map traces"
+    },
+    "necast_light": {
+      "hex": "#AEA6DC",
+      "meaning": "tint(necast): NeCast with less input (recombination map only, without errors, simulated windows); PSMC+ posterior; heterozygous genotype"
+    },
+    "necast_pale": {
+      "hex": "#DFDBF1",
+      "meaning": "fills behind NeCast (the fusion box); site accent background"
+    },
+    "phlash": {
+      "hex": "#D4623A",
+      "meaning": "phlash"
+    },
+    "smcpp": {
+      "hex": "#6E9F90",
+      "meaning": "SMC++"
+    },
+    "fitcoal": {
+      "hex": "#5C85A9",
+      "meaning": "FitCoal"
+    },
+    "msmc2": {
+      "hex": "#846475",
+      "meaning": "MSMC2"
+    },
+    "mutation": {
+      "hex": "#B49A6E",
+      "meaning": "the mutation map: its traces and the mutation-map-only condition"
+    },
+    "mutation_dark": {
+      "hex": "#96815E",
+      "meaning": "labels and text in the mutation map's colour (the tan is too light for text)"
+    },
+    "false_variant": {
+      "hex": "#E0A33B",
+      "meaning": "false variants (sequencing errors); used for nothing else"
+    },
+    "ink": {
+      "hex": "#1F2328",
+      "meaning": "truth, text, titles, end-to-end ticks"
+    },
+    "grey_800": {
+      "hex": "#4A4F57",
+      "meaning": "secondary text, tick labels"
+    },
+    "grey_700": {
+      "hex": "#6B7078",
+      "meaning": "axes and ticks; 'NeCast worse'; the end of a diverging scale opposite NeCast"
+    },
+    "grey_600": {
+      "hex": "#7D838B",
+      "meaning": "points without a method, annotations, centromeres; label text for grey points"
+    },
+    "grey_500": {
+      "hex": "#9AA0A7",
+      "meaning": "muted data: training curves, the oracle point, second example curves"
+    },
+    "grey_400": {
+      "hex": "#AEB3BA",
+      "meaning": "no map; a tie; deme outlines"
+    },
+    "grey_300": {
+      "hex": "#C3C8CF",
+      "meaning": "a tie that depends on the metric; connectors; outlines of missing cells"
+    },
+    "grey_200": {
+      "hex": "#D5DAE0",
+      "meaning": "card borders; tie bars; the small source deme"
+    },
+    "grey_150": {
+      "hex": "#E4E7EB",
+      "meaning": "background curves; chromosome bars; deme fills"
+    },
+    "grey_100": {
+      "hex": "#ECEEF1",
+      "meaning": "grid lines; ancestral genotype"
+    },
+    "grey_50": {
+      "hex": "#F7F8FA",
+      "meaning": "card fills; the midpoint of a diverging scale"
+    },
+    "white": {
+      "hex": "#FFFFFF",
+      "meaning": "paper; missing genotype"
+    }
+  },
+  "continents": {
+    "note": "Population figures only (Fig. 4e, Fig. 6, the 1000 Genomes card). hcl(h, c = 60, l = 50); populations within a group are an HCL ramp of the group's hue.",
+    "AFR": {
+      "hue": 62,
+      "hex": "#947300"
+    },
+    "EUR": {
+      "hue": 250,
+      "hex": "#4A79B6"
+    },
+    "SAS": {
+      "hue": 305,
+      "hex": "#A55BA9"
+    },
+    "EAS": {
+      "hue": 158,
+      "hex": "#008C62"
+    },
+    "AMR": {
+      "hue": 18,
+      "hex": "#B06156"
+    }
+  },
+  "logo": {
+    "note": "The tile only.",
+    "tile_top": {
+      "hex": "#6957C1"
+    },
+    "tile_bottom": {
+      "hex": "#40318C"
+    }
+  },
+  "dark_ui": {
+    "note": "Dark theme of the site only, chosen for contrast on the dark background.",
+    "accent_low": {
+      "hex": "#282150"
+    },
+    "accent": {
+      "hex": "#9E8FE5"
+    },
+    "accent_high": {
+      "hex": "#DBD6F5"
+    },
+    "name": {
+      "hex": "#B2A6ED"
+    }
+  }
+}
