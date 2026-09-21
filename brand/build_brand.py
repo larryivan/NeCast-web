@@ -2,7 +2,8 @@
 
 The mark is an N drawn as a step function: the left stem rises, a high plateau steps down twice
 to a low plateau, and the right stem rises again, the shape of a population history with a
-bottleneck. White on a blue tile whose gradient centres on the NeCast blue (#1F4E9E).
+bottleneck. White on a purple tile whose gradient centres on NeCast's purple (#5242A7); every colour
+is from brand/palette.json.
 
 The N is drawn as an outline on a 64-unit grid rather than as a stroked line, so each part has
 its own measure: stems 5 units wide, treads 4.6 high (a horizontal looks heavier than a vertical
@@ -17,7 +18,7 @@ import math
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-BLUE, TOP, BOTTOM = "#1F4E9E", "#2C62BF", "#163C80"
+NECAST, TOP, BOTTOM = "#5242A7", "#6957C1", "#40318C"  # palette: necast, logo tile_top, logo tile_bottom
 
 STEM, TREAD, GAP, DROP = 5.0, 4.6, 3.6, 14.5
 OUTER, INNER, OVERSHOOT = 4.2, 0.6, 0.35
@@ -74,14 +75,14 @@ def svg(view, body, title="NeCast"):
 mark = svg("0 0 64 64", gradient("necast-tile") + '<rect width="64" height="64" rx="14.5" fill="url(#necast-tile)"/>' + glyph("#fff"))
 # full-bleed square for app icons (the platform rounds the corners itself)
 square = svg("0 0 64 64", gradient("necast-square") + '<rect width="64" height="64" fill="url(#necast-square)"/>' + glyph("#fff"))
-# the glyph alone, cropped to its outline, in blue for light grounds and white for dark or blue ones
+# the glyph alone, cropped to its outline, in purple for light grounds and white for dark or purple ones
 crop = f"{xs[0] - v:.2f} {top - OVERSHOOT:.2f} {width:.2f} {height + 2 * OVERSHOOT:.2f}"
-glyph_blue = svg(crop, glyph(BLUE))
+glyph_purple = svg(crop, glyph(NECAST))
 glyph_white = svg(crop, glyph("#fff"))
 
 out = ROOT / "brand"
 for name, text in {"necast-mark.svg": mark, "necast-mark-square.svg": square,
-                   "necast-glyph.svg": glyph_blue, "necast-glyph-white.svg": glyph_white}.items():
+                   "necast-glyph.svg": glyph_purple, "necast-glyph-white.svg": glyph_white}.items():
     (out / name).write_text(text)
 (ROOT / "public" / "favicon.svg").write_text(mark)
 (ROOT / "src" / "assets" / "logo.svg").write_text(mark)

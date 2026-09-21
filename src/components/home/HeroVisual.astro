@@ -2,7 +2,9 @@
 // The home-page visual, drawn at build time from a real training window (sim_00000016):
 // the genotypes of 32 individuals at 48 variant sites feed five streams, which end in the
 // window's 64 interval labels on log axes. No text inside, so it serves both languages; the
-// colours come from Starlight's theme, so it follows light and dark mode.
+// colours come from Starlight's theme, so it follows light and dark mode. Genotypes are coloured as
+// in the paper's Fig. 1a: heterozygous in NeCast's light purple, homozygous derived in its purple,
+// missing calls as empty cells.
 import windowData from '../../data/hero_window.json';
 
 interface Props {
@@ -99,13 +101,15 @@ const streams = [0.1, 0.3, 0.5, 0.7, 0.9].map((f) => {
     fill: var(--sl-color-gray-6);
   }
   .g1 {
-    fill: color-mix(in srgb, var(--sl-color-accent) 48%, var(--sl-color-bg));
+    fill: var(--necast-light);
   }
   .g2 {
     fill: var(--sl-color-accent);
   }
   .gm {
-    fill: #e0a33b;
+    fill: var(--sl-color-bg);
+    stroke: var(--sl-color-gray-4);
+    stroke-width: 0.5;
   }
   .streams path {
     fill: none;

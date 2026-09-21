@@ -12,16 +12,20 @@
 /* Starlight marks the theme on <html data-theme="light|dark">; shadcn's dark: variant follows it. */
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 
-/* NeCast blue (#1F4E9E, the method colour of the paper's figures) as Starlight's accent. */
+/* NeCast purple as Starlight's accent: the colour of NeCast in the paper's figures, the cards and the logo
+   (brand/palette.json). Light theme: necast, necast_pale and necast_deep; dark theme: the dark_ui set, chosen for
+   contrast on the dark background. --necast-light is NeCast's light step (heterozygous genotypes in the drawings). */
 :root {
-  --sl-color-accent-low: #12284a;
-  --sl-color-accent: #6f9bdb;
-  --sl-color-accent-high: #cddcf3;
+  --sl-color-accent-low: #282150;
+  --sl-color-accent: #9e8fe5;
+  --sl-color-accent-high: #dbd6f5;
+  --necast-light: color-mix(in srgb, var(--sl-color-accent) 48%, var(--sl-color-bg));
 }
 :root[data-theme='light'] {
-  --sl-color-accent-low: #dbe5f4;
-  --sl-color-accent: #1f4e9e;
-  --sl-color-accent-high: #12305f;
+  --sl-color-accent-low: #dfdbf1;
+  --sl-color-accent: #5242a7;
+  --sl-color-accent-high: #302661;
+  --necast-light: #aea6dc;
 }
 
 /* The header is Starlight's bar plus a row of the site's sections (overrides/Header.astro).

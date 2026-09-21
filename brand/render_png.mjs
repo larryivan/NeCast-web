@@ -1,6 +1,7 @@
 // Renders the PNG versions of the NeCast mark and the lockups (mark and wordmark) with headless
 // Chrome, after `python brand/build_brand.py` has written the SVGs. CHROME may point to another
-// Chrome or Chromium binary. The wordmark is set in the system's sans-serif (SF Pro on macOS).
+// Chrome or Chromium binary. The wordmark is set in the system's sans-serif (SF Pro on macOS); its colours are
+// from brand/palette.json (necast and ink on light grounds, the dark_ui name colour and grey_100 on ink).
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -30,8 +31,8 @@ const jobs = [
   ['brand/necast-mark-1024.png', 1024, 1024, `<div style="width:1024px;height:1024px">${mark}</div>`],
   ['brand/necast-mark-512.png', 512, 512, `<div style="width:512px;height:512px">${mark}</div>`],
   ['public/apple-touch-icon.png', 180, 180, `<div style="width:180px;height:180px">${square}</div>`],
-  ['brand/necast-lockup.png', 760, 200, lockup('#1F4E9E', '#18181B')],
-  ['brand/necast-lockup-dark.png', 760, 200, lockup('#8FB0EA', '#F4F4F5'), '#18181B'],
+  ['brand/necast-lockup.png', 760, 200, lockup('#5242A7', '#1F2328')],
+  ['brand/necast-lockup-dark.png', 760, 200, lockup('#B2A6ED', '#ECEEF1'), '#1F2328'],
 ];
 
 const work = mkdtempSync(join(tmpdir(), 'necast-brand-'));
