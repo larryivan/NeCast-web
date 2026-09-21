@@ -56,19 +56,25 @@ npm run build && node scripts/build_social_card.mjs
 
 The NeCast mark is an N drawn as a step function: the left stem rises, a high plateau steps
 down twice, and the right stem rises again, the shape of a population history with a
-bottleneck. It is white on a blue tile whose gradient centres on the NeCast blue (#1F4E9E).
-In the name, "Ne" takes the blue.
+bottleneck. It is white on a purple tile whose gradient centres on NeCast's purple (#5242A7).
+In the name, "Ne" takes the purple.
+
+Colours follow one palette across the paper's figures, the Hugging Face cards, this site and the
+logo: `brand/palette.json`, explained in [brand/COLOURS.md](brand/COLOURS.md). Each colour has one
+meaning; NeCast is purple, and its variants and parts are lighter or darker steps of that purple.
 
 | file in `brand/` | use |
 |---|---|
 | `necast-mark.svg`, `necast-mark-1024.png`, `necast-mark-512.png` | the mark |
 | `necast-mark-square.svg` | the mark on a full square, for app icons whose platform rounds the corners |
-| `necast-glyph.svg`, `necast-glyph-white.svg` | the N alone, for light grounds and for dark or blue ones |
+| `necast-glyph.svg`, `necast-glyph-white.svg` | the N alone, for light grounds and for dark or purple ones |
 | `necast-lockup.png`, `necast-lockup-dark.png` | the mark and the name, for light and dark grounds |
+| `palette.json`, `COLOURS.md` | the colour palette and what each colour means |
 
 ```bash
 python brand/build_brand.py   # the SVGs, and the site's favicon and header logo
 node brand/render_png.mjs     # the PNGs and public/apple-touch-icon.png (needs Chrome)
+python brand/check_palette.py # every colour in the figure scripts and site sources is in the palette
 ```
 
 ## Authors
