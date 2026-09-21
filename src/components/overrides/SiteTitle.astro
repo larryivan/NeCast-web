@@ -1,0 +1,41 @@
+---
+// The mark and the name in the header, set like the brand lockup (brand/): "Ne" in the accent
+// colour, since Nₑ is what NeCast estimates, and "Cast" in the text colour. The name follows, so
+// the image is decorative to screen readers.
+import logo from '../../assets/logo.svg';
+
+const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
+---
+
+<a href={siteTitleHref} class="site-title sl-flex">
+  <img src={logo.src} width={logo.width} height={logo.height} alt="" />
+  <span translate="no">
+    {siteTitle === 'NeCast' ? <><span class="ne">Ne</span>Cast</> : siteTitle}
+  </span>
+</a>
+
+<style>
+  @layer starlight.core {
+    .site-title {
+      align-items: center;
+      gap: 0.65rem;
+      min-width: 0;
+      font-size: var(--sl-text-h4);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--sl-color-white);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    span {
+      overflow: hidden;
+    }
+    .ne {
+      color: var(--sl-color-accent);
+    }
+    img {
+      width: auto;
+      height: calc(var(--necast-bar-height) - 2 * var(--sl-nav-pad-y));
+    }
+  }
+</style>

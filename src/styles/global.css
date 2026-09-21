@@ -26,7 +26,7 @@
 
 /* The header is Starlight's bar plus a row of the site's sections (overrides/Header.astro).
    Starlight places the contents bar and the page below --sl-nav-height, so that height covers
-   both rows; the logo keeps the bar's own height. */
+   both rows; the logo (overrides/SiteTitle.astro) keeps the bar's own height. */
 :root {
   --necast-bar-height: 3.5rem;
   --necast-tabs-height: 2.5rem;
@@ -37,9 +37,6 @@
     --necast-bar-height: 4rem;
     --necast-tabs-height: 2.75rem;
   }
-}
-.site-title img {
-  height: calc(var(--necast-bar-height) - 2 * var(--sl-nav-pad-y));
 }
 
 /* No page has a left sidebar (src/routeData.ts), and Starlight then widens the content to the

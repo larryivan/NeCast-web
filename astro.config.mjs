@@ -35,6 +35,7 @@ export default defineConfig({
         Header: './src/components/overrides/Header.astro',
         Hero: './src/components/overrides/Hero.astro',
         PageTitle: './src/components/overrides/PageTitle.astro',
+        SiteTitle: './src/components/overrides/SiteTitle.astro',
         Footer: './src/components/overrides/Footer.astro',
       },
       defaultLocale: 'root',
