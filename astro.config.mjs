@@ -18,6 +18,8 @@ export default defineConfig({
       favicon: '/favicon.svg',
       // the link-preview image (scripts/build_social_card.mjs draws it); Starlight adds the rest
       head: [
+        // the mark on a full square for iOS home screens (brand/render_png.mjs)
+        { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/NeCast-web/apple-touch-icon.png' } },
         { tag: 'meta', attrs: { property: 'og:image', content: 'https://larryivan.github.io/NeCast-web/og.png' } },
         { tag: 'meta', attrs: { property: 'og:image:width', content: '1200' } },
         { tag: 'meta', attrs: { property: 'og:image:height', content: '630' } },
