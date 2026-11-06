@@ -90,62 +90,50 @@
  "families": [
   {
    "key": "constant",
-   "colour": "#7D838B",
    "windows": 4352
   },
   {
    "key": "exponential",
-   "colour": "#B07A3B",
    "windows": 4293
   },
   {
    "key": "size_event",
-   "colour": "#C8553D",
    "windows": 10837
   },
   {
    "key": "multi_event",
-   "colour": "#9C3D54",
    "windows": 8941
   },
   {
    "key": "bottleneck",
-   "colour": "#C36F9A",
    "windows": 10787
   },
   {
    "key": "event_on_background",
-   "colour": "#7A5BA6",
    "windows": 9393
   },
   {
    "key": "spectral_walk",
-   "colour": "#4E5BA6",
    "windows": 21983
   },
   {
    "key": "sawtooth",
-   "colour": "#2F7FA8",
    "windows": 3397
   },
   {
    "key": "literature_sawtooth",
-   "colour": "#4FA3C7",
    "windows": 3297
   },
   {
    "key": "ooa_chain",
-   "colour": "#2E8C6E",
    "windows": 8777
   },
   {
    "key": "empirical_human_ne_template",
-   "colour": "#4F7F3A",
    "windows": 20560
   },
   {
    "key": "stdpopsim_single_pop",
-   "colour": "#8AA33C",
    "windows": 2631
   }
  ],

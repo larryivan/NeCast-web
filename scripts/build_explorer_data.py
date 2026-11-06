@@ -33,8 +33,6 @@ SCALE = 1000
 FAMILIES = ["constant", "exponential", "size_event", "multi_event", "bottleneck", "event_on_background",
             "spectral_walk", "sawtooth", "literature_sawtooth", "ooa_chain", "empirical_human_ne_template",
             "stdpopsim_single_pop"]
-FAMILY_COLOURS = ["#7D838B", "#B07A3B", "#C8553D", "#9C3D54", "#C36F9A", "#7A5BA6", "#4E5BA6", "#2F7FA8",
-                  "#4FA3C7", "#2E8C6E", "#4F7F3A", "#8AA33C"]          # the manuscript's Fig. 1b
 MAPS = ["constant_clean", "constant_random_global", "synthetic_heterogeneous", "empirical_slice"]
 SPLITS = ["train", "development", "reserved", "none"]
 STAGES = ["fit", "validation", "test", "none"]
@@ -137,7 +135,8 @@ def main() -> None:
         "time_edges": [float(x) for x in EDGES],
         "labels": {"scale": SCALE, "dtype": "int16-le", "rows_per_file": CHUNK, "files": n_chunks},
         "columns": {"ne_min": "1000 * min log10 Ne over the 64 labels", "ne_max": "1000 * max log10 Ne over the 64 labels"},
-        "families": [{"key": k, "colour": c, "windows": w} for k, c, w in zip(FAMILIES, FAMILY_COLOURS, counts("generator_recipe", FAMILIES))],
+        # families have names, not colours (brand/palette.json: scenario families are never coloured)
+        "families": [{"key": k, "windows": w} for k, w in zip(FAMILIES, counts("generator_recipe", FAMILIES))],
         "maps": [{"key": k, "windows": w} for k, w in zip(MAPS, counts("map_type", MAPS))],
         "splits": [{"key": k, "windows": w} for k, w in zip(SPLITS, counts("split", SPLITS))],
         "stages": [{"key": k, "windows": w} for k, w in zip(STAGES, counts("stage", STAGES))],

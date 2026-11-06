@@ -29,7 +29,7 @@ def files():
         return [Path(a) for a in sys.argv[1:]]
     out = sorted(PAPER.glob("*.R")) + [CARDS / "card_figures.R"]
     out += sorted(f for ext in ("astro", "css", "ts", "tsx", "mjs") for f in (SITE / "src").rglob(f"*.{ext}"))
-    out += sorted((SITE / "scripts").glob("*.mjs")) + sorted((SITE / "brand").glob("*.py")) + sorted((SITE / "brand").glob("*.mjs"))
+    out += sorted((SITE / "scripts").glob("*.mjs")) + sorted((SITE / "scripts").glob("*.py")) + sorted((SITE / "brand").glob("*.py")) + sorted((SITE / "brand").glob("*.mjs"))
     return out
 
 

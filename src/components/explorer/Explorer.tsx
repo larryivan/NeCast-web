@@ -89,11 +89,10 @@ function Facet({ title, children }: { title: string; children: React.ReactNode }
   );
 }
 
-function Option({ checked, onChange, label, count, dot }: { checked: boolean; onChange: () => void; label: string; count: string; dot?: string }) {
+function Option({ checked, onChange, label, count }: { checked: boolean; onChange: () => void; label: string; count: string }) {
   return (
     <label className="flex cursor-pointer items-center gap-2 text-sm leading-tight">
       <Checkbox checked={checked} onCheckedChange={onChange} />
-      {dot && <span className="size-2.5 shrink-0 rounded-full" style={{ background: dot }} />}
       <span className="flex-1">{label}</span>
       <span className="text-xs text-muted-foreground tabular-nums">{count}</span>
     </label>
@@ -214,10 +213,7 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
         cell: (info) => {
           const f = fam[info.getValue() as number];
           return (
-            <span className="flex min-w-0 items-center gap-2">
-              <span className="size-2 shrink-0 rounded-full" style={{ background: f.colour }} />
-              <span className="truncate">{FAMILY_NAMES[f.key][lang]}</span>
-            </span>
+            <span className="block min-w-0 truncate">{FAMILY_NAMES[f.key][lang]}</span>
           );
         },
       }),
@@ -453,7 +449,6 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
             onChange={() => setFamilies(toggle(families, i))}
             label={FAMILY_NAMES[f.key][lang]}
             count={formatInt(result.famCounts[i], lang)}
-            dot={f.colour}
           />
         ))}
       </Facet>
@@ -659,10 +654,7 @@ export default function Explorer({ lang = 'en' }: { lang?: Lang }) {
                   )}
                 </div>
                 <SheetDescription className="flex flex-wrap gap-1.5">
-                  <Badge variant="secondary">
-                    <span className="size-2 rounded-full" style={{ background: summary.families[cols.family[sel]].colour }} />
-                    {FAMILY_NAMES[summary.families[cols.family[sel]].key][lang]}
-                  </Badge>
+                  <Badge variant="secondary">{FAMILY_NAMES[summary.families[cols.family[sel]].key][lang]}</Badge>
                   <Badge variant="secondary">{MAP_NAMES[summary.maps[cols.map[sel]].key][lang]}</Badge>
                   <Badge variant="secondary">{GROUPS[GROUP_OF[cols.split[sel] * 4 + cols.stage[sel]]].name[lang]}</Badge>
                   <Badge variant="outline">{cols.map[sel] === 0 ? t.withoutErrors : t.withErrors}</Badge>

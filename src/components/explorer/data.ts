@@ -13,7 +13,7 @@ export interface Summary {
   bytes: { npz: number; jsonl: number };
   time_edges: number[];
   labels: { scale: number; dtype: string; rows_per_file: number; files: number };
-  families: { key: string; colour: string; windows: number }[];
+  families: { key: string; windows: number }[];
   maps: { key: string; windows: number }[];
   splits: { key: string; windows: number }[];
   stages: { key: string; windows: number }[];
