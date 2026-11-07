@@ -4,7 +4,7 @@
     "One colour, one meaning: every colour in the paper's figures, the Hugging Face cards, the site and the logo comes from this file.",
     "Hue marks a method. NeCast's variants, parts and inputs use NeCast's purple at five lightness steps; another method's variant is tint() of that method's colour.",
     "Truth, text, axes and anything that belongs to no method are ink and the grey scale.",
-    "Allowed derivations: tint() (lighten in HLS) of a method colour for a variant of that method (0.55 for 'without errors', 0.35 for other settings), and transparency of a colour here for bands and regions. Text in a colour too light to read takes the next darker step of its family (necast_light to necast_mid, grey_400 and grey_500 to grey_600, mutation to mutation_dark, a method's 0.35 tint to the method colour). Nothing else.",
+    "Allowed derivations: tint() (lighten in HLS) of a method colour for a variant of that method (0.55 for 'without errors', 0.35 for other settings), and transparency of a colour here for bands and regions. Text in a colour too light to read takes the next darker step of its family (necast_light to necast_mid, grey_400 and grey_500 to grey_600, mutation to mutation_dark, smcpp and its 0.35 tint to smcpp_dark, another method's 0.35 tint to the method colour). Nothing else.",
     "Continents are a separate, directly labelled encoding used only in population figures.",
     "Scenario families are told apart by point shape or by panel, never by colour."
   ],
@@ -36,6 +36,10 @@
     "smcpp": {
       "hex": "#6E9F90",
       "meaning": "SMC++"
+    },
+    "smcpp_dark": {
+      "hex": "#4C7F70",
+      "meaning": "labels and text in SMC++'s colour (the green is too light for text)"
     },
     "fitcoal": {
       "hex": "#5C85A9",
@@ -87,7 +91,7 @@
     },
     "grey_200": {
       "hex": "#D5DAE0",
-      "meaning": "card borders; tie bars; the small source deme"
+      "meaning": "card borders; the small source deme; the rate-level step behind a bar (Extended Data Fig. 4a)"
     },
     "grey_150": {
       "hex": "#E4E7EB",

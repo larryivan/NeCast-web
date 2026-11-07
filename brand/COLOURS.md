@@ -14,7 +14,8 @@ not write a hex code at all: they name a colour from `style_ng.R`, which copies 
 4. The only derivations allowed are `tint()` of a method colour for a variant of that method, and
    transparency for bands and regions. Text in a colour too light to read takes the next darker
    step of its family: `necast_light` → `necast_mid`, `grey_400` and `grey_500` → `grey_600`, `mutation` →
-   `mutation_dark`, a method's 0.35 tint → the method colour (`text_col()` in `style_ng.R`).
+   `mutation_dark`, `smcpp` and its 0.35 tint → `smcpp_dark`, another method's 0.35 tint → the method
+   colour (`text_col()` in `style_ng.R`).
 5. Continents are a separate encoding, used only in population figures and always labelled directly.
 6. Scenario families are told apart by point shape or by panel, never by colour.
 
@@ -34,6 +35,7 @@ not write a hex code at all: they name a colour from `style_ng.R`, which copies 
 |---|---|---|
 | `phlash` | #D4623A | phlash |
 | `smcpp` | #6E9F90 | SMC++ |
+| `smcpp_dark` | #4C7F70 | text in SMC++'s colour |
 | `fitcoal` | #5C85A9 | FitCoal |
 | `msmc2` | #846475 | MSMC2 |
 | `mutation` | #B49A6E | the mutation map: its traces and the mutation-map-only condition |
@@ -54,7 +56,7 @@ state is `grey_100`.
 | `grey_500` | #9AA0A7 | muted data: training curves, the oracle point |
 | `grey_400` | #AEB3BA | no map; a tie; deme outlines |
 | `grey_300` | #C3C8CF | a tie that depends on the metric; connectors; outlines of missing cells |
-| `grey_200` | #D5DAE0 | card borders; the small source deme |
+| `grey_200` | #D5DAE0 | card borders; the small source deme; the rate-level step behind a bar |
 | `grey_150` | #E4E7EB | background curves; chromosome bars; deme fills |
 | `grey_100` | #ECEEF1 | grid lines; ancestral genotype |
 | `grey_50` | #F7F8FA | card fills; the middle of a diverging scale |
