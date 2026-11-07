@@ -13,8 +13,8 @@ not write a hex code at all: they name a colour from `style_ng.R`, which copies 
 3. Truth, text, axes and anything that belongs to no method are ink and one grey scale.
 4. The only derivations allowed are `tint()` of a method colour for a variant of that method, and
    transparency for bands and regions. Text in a colour too light to read takes the next darker
-   step of its family: `necast_light` → `necast_mid`, `grey_400` → `grey_600`, `mutation` →
-   `mutation_dark` (`text_col()` in `style_ng.R`).
+   step of its family: `necast_light` → `necast_mid`, `grey_400` and `grey_500` → `grey_600`, `mutation` →
+   `mutation_dark`, a method's 0.35 tint → the method colour (`text_col()` in `style_ng.R`).
 5. Continents are a separate encoding, used only in population figures and always labelled directly.
 6. Scenario families are told apart by point shape or by panel, never by colour.
 
@@ -24,8 +24,8 @@ not write a hex code at all: they name a colour from `style_ng.R`, which copies 
 |---|---|---|
 | `necast_deep` | #302661 | true maps (the oracle condition); the site encoder |
 | `necast` | #5242A7 | NeCast; its network; both maps; homozygous derived genotype; "NeCast better"; site accent; logo |
-| `necast_mid` | #786AC4 | summary statistics; recombination-map traces |
-| `necast_light` | #AEA6DC | `tint(necast)`: NeCast with less input; PSMC+ posterior; heterozygous genotype |
+| `necast_mid` | #786AC4 | the recombination map: its traces and the recombination-map-only condition; summary statistics |
+| `necast_light` | #AEA6DC | `tint(necast)`: NeCast without errors or on simulated windows; PSMC+ posterior; heterozygous genotype |
 | `necast_pale` | #DFDBF1 | fills behind NeCast; the site's accent background |
 
 ## Other methods and the data

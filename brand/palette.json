@@ -1,10 +1,10 @@
 {
-  "version": "2026-09-21",
+  "version": "2026-11-07",
   "rules": [
     "One colour, one meaning: every colour in the paper's figures, the Hugging Face cards, the site and the logo comes from this file.",
     "Hue marks a method. NeCast's variants, parts and inputs use NeCast's purple at five lightness steps; another method's variant is tint() of that method's colour.",
     "Truth, text, axes and anything that belongs to no method are ink and the grey scale.",
-    "Allowed derivations: tint() (lighten in HLS) of a method colour for a variant of that method, and transparency of a colour here for bands and regions. Nothing else.",
+    "Allowed derivations: tint() (lighten in HLS) of a method colour for a variant of that method (0.55 for 'without errors', 0.35 for other settings), and transparency of a colour here for bands and regions. Text in a colour too light to read takes the next darker step of its family (necast_light to necast_mid, grey_400 and grey_500 to grey_600, mutation to mutation_dark, a method's 0.35 tint to the method colour). Nothing else.",
     "Continents are a separate, directly labelled encoding used only in population figures.",
     "Scenario families are told apart by point shape or by panel, never by colour."
   ],
@@ -19,11 +19,11 @@
     },
     "necast_mid": {
       "hex": "#786AC4",
-      "meaning": "summary statistics; recombination-map traces"
+      "meaning": "the recombination map: its traces and the recombination-map-only condition; summary statistics"
     },
     "necast_light": {
       "hex": "#AEA6DC",
-      "meaning": "tint(necast): NeCast with less input (recombination map only, without errors, simulated windows); PSMC+ posterior; heterozygous genotype"
+      "meaning": "tint(necast): NeCast without errors or on simulated windows; PSMC+ posterior; heterozygous genotype"
     },
     "necast_pale": {
       "hex": "#DFDBF1",
