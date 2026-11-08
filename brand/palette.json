@@ -4,7 +4,7 @@
     "One colour, one meaning: every colour in the paper's figures, the Hugging Face cards, the site and the logo comes from this file.",
     "Hue marks a method. NeCast's variants, parts and inputs use NeCast's purple at five lightness steps; another method's variant is tint() of that method's colour.",
     "Truth, text, axes and anything that belongs to no method are ink and the grey scale.",
-    "Allowed derivations: tint() (lighten in HLS) of a method colour for a variant of that method (0.55 for 'without errors', 0.35 for other settings), and transparency of a colour here for bands and regions. Text in a colour too light to read takes the next darker step of its family (necast_light to necast_mid, grey_400 and grey_500 to grey_600, mutation to mutation_dark, smcpp and its 0.35 tint to smcpp_dark, another method's 0.35 tint to the method colour). Nothing else.",
+    "Allowed derivations: tint() (lighten in HLS) of a method colour for a variant of that method (0.55 for 'without errors', 0.35 for other settings), and transparency of a colour here for bands and regions. Text in a colour too light to read takes the next darker step of its family (necast_light to necast_mid, every grey from grey_400 to grey_700 to grey_800, mutation to mutation_dark, smcpp and its 0.35 tint to smcpp_dark, another method's 0.35 tint to the method colour). Nothing else.",
     "Continents are a separate, directly labelled encoding used only in population figures.",
     "Scenario families are told apart by point shape or by panel, never by colour."
   ],
@@ -63,11 +63,11 @@
     },
     "ink": {
       "hex": "#1F2328",
-      "meaning": "truth, text, titles, end-to-end ticks"
+      "meaning": "truth, text, titles, tick labels, end-to-end ticks"
     },
     "grey_800": {
       "hex": "#4A4F57",
-      "meaning": "secondary text, tick labels"
+      "meaning": "text on or beside grey marks, in place of a lighter grey"
     },
     "grey_700": {
       "hex": "#6B7078",
@@ -75,15 +75,15 @@
     },
     "grey_600": {
       "hex": "#7D838B",
-      "meaning": "points without a method, annotations, centromeres; label text for grey points"
+      "meaning": "points without a method, annotations, centromeres"
     },
     "grey_500": {
       "hex": "#9AA0A7",
-      "meaning": "muted data: training curves, the oracle point, second example curves"
+      "meaning": "muted data: training curves, the oracle point, second example curves; no map; a tie"
     },
     "grey_400": {
       "hex": "#AEB3BA",
-      "meaning": "no map; a tie; deme outlines"
+      "meaning": "deme outlines"
     },
     "grey_300": {
       "hex": "#C3C8CF",
