@@ -49,8 +49,8 @@ state is `grey_100`.
 
 | name | hex | meaning |
 |---|---|---|
-| `ink` | #1F2328 | truth, text, titles |
-| `grey_800` | #4A4F57 | secondary text, tick labels |
+| `ink` | #1F2328 | truth, text, titles, tick labels |
+| `grey_800` | #4A4F57 | text on or beside grey marks, in place of a lighter grey |
 | `grey_700` | #6B7078 | axes; "NeCast worse"; the far end of a scale that starts at NeCast |
 | `grey_600` | #7D838B | points without a method, annotations, centromeres |
 | `grey_500` | #9AA0A7 | muted data: training curves, the oracle point; no map; a tie |
