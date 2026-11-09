@@ -22,7 +22,7 @@ import benchmarkHistoriesZhFigure from '../../../../assets/figures/benchmark_his
 | `a2` | 12 | 同 `a1` | 基因分型错误、缺失、假变异和相位切换错误，水平与训练数据相同 | 同上 |
 | `b` | 33 | deCODE 2019 重组图谱和 Roulette 突变图谱的片段 | 同 `a2` | NeCast |
 
-每条历史有 12 个窗口，其中 8 个用于评分。在设置 `b` 中，NeCast 对每个窗口用五种版本的图谱分别运行（`map_variants/`）。
+每条历史有 12 个窗口，其中 8 个用于评分。在设置 `b` 中，NeCast 对每个窗口用窗口自带的估计图谱运行一次（`estimates/necast/b/`），再用另外五种版本的图谱分别运行，其中包括真实图谱（`map_variants/`）。
 
 ## 内容
 

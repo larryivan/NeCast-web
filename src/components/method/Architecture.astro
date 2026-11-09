@@ -29,7 +29,7 @@ const T = {
     outputSub: ['64 intervals', '50 to 500,000', 'generations ago'],
     outputSubTall: ['64 intervals', '50 to 500,000 generations ago'],
     caption:
-      'Every stream reads the same variant sites. The maps are used in two ways: the site encoder and linkage disequilibrium measure distances along them, and PSMC+ decodes each genome with them.',
+      'Every stream reads the same variant sites. The maps enter in four places: the site encoder reads each region’s position and length on both maps, linkage disequilibrium groups site pairs by distance on the recombination map, PSMC+ decodes each genome with both maps, and the baseline uses the mutation map.',
   },
   zh: {
     aria: '示意图：一个窗口的基因型和图谱进入五路输入；网络把它们合成为 64 个区间上的校正量，加到由 Watterson 估计得到的基线上，得到 log10 Ne。',
@@ -43,7 +43,7 @@ const T = {
     output: 'log₁₀ Nₑ',
     outputSub: ['64 个区间', '距今 50 到', '500,000 代'],
     outputSubTall: ['64 个区间', '距今 50 到 500,000 代'],
-    caption: '五路输入读取的是同一批变异位点。图谱有两种用法：位点编码器和连锁不平衡沿图谱度量距离，PSMC+ 用它们解码每个基因组。',
+    caption: '五路输入读取的是同一批变异位点。图谱用在四处：位点编码器读每个区域在两张图谱上的位置和长度，连锁不平衡按重组图谱上的距离给位点对分组，PSMC+ 用两张图谱解码每个基因组，基线用突变图谱。',
   },
 }[lang];
 
